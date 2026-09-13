@@ -38,10 +38,18 @@ $flash = getFlash();
             <a href="<?= BASE_URL ?>pengunjung/index.php" class="user-menu-btn" title="Buka Dashboard Wisatawan">
               <?php 
                 $sessFoto = $_SESSION['user_foto'] ?? 'default_avatar.png';
-                $hasSessFoto = (!empty($sessFoto) && $sessFoto !== 'default_avatar.png' && file_exists(__DIR__ . '/../assets/uploads/users/' . $sessFoto));
+                $sessFotoUrl = '';
+                if (!empty($sessFoto) && $sessFoto !== 'default_avatar.png') {
+                    if (strpos($sessFoto, 'http://') === 0 || strpos($sessFoto, 'https://') === 0) {
+                        $sessFotoUrl = $sessFoto;
+                    } elseif (file_exists(__DIR__ . '/../assets/uploads/users/' . $sessFoto)) {
+                        $sessFotoUrl = BASE_URL . 'assets/uploads/users/' . $sessFoto;
+                    }
+                }
               ?>
-              <?php if ($hasSessFoto): ?>
-                <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($sessFoto) ?>" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8;">
+              <?php if (!empty($sessFotoUrl)): ?>
+                <img src="<?= htmlspecialchars($sessFotoUrl) ?>" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar" style="display: none; background: linear-gradient(135deg, #0284c7, #6366f1);"><?= strtoupper(substr($currentUser, 0, 1)) ?></div>
               <?php else: ?>
                 <div class="avatar" style="background: linear-gradient(135deg, #0284c7, #6366f1);"><?= strtoupper(substr($currentUser, 0, 1)) ?></div>
               <?php endif; ?>

@@ -161,10 +161,21 @@ $flash = getFlash();
             
             <!-- Column 1: Image & Code -->
             <div style="position: relative; border-radius: 0.55rem; overflow: hidden; height: 110px; background: #0f172a;">
-              <img src="<?= BASE_URL ?>assets/uploads/destinasi/<?= htmlspecialchars($t['foto_utama']) ?>" 
+              <?php 
+                $tFoto = trim($t['foto_utama'] ?? '');
+                if (!empty($tFoto) && (strpos($tFoto, 'http://') === 0 || strpos($tFoto, 'https://') === 0)) {
+                    $tFotoUrl = $tFoto;
+                } elseif (!empty($tFoto) && file_exists(__DIR__ . '/../assets/uploads/destinasi/' . $tFoto)) {
+                    $tFotoUrl = BASE_URL . 'assets/uploads/destinasi/' . $tFoto;
+                } else {
+                    $tFotoUrl = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80';
+                }
+              ?>
+              <img src="<?= htmlspecialchars($tFotoUrl) ?>" 
                    alt="<?= htmlspecialchars($t['nama_destinasi']) ?>" 
                    style="width: 100%; height: 100%; object-fit: cover;"
-                   onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'">
+                   loading="lazy"
+                   onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'">
               <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,23,42,0.85) 0%, transparent 60%);"></div>
               
               <div style="position: absolute; top: 0.4rem; left: 0.4rem;">

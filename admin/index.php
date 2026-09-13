@@ -44,24 +44,24 @@ require_once __DIR__ . '/includes/sidebar.php';
   <!-- Topbar Luxury -->
   <div class="admin-topbar-luxury">
     <div>
-      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.15rem;">
         <span class="badge-luxury badge-luxury-primary">
-          <i class="fa-solid fa-bolt"></i> Live Real-Time Data
+          <span style="font-size: 0.85rem;">⚡</span> Live Real-Time
         </span>
-        <span style="font-size: 0.8rem; color: #64748b;">
+        <span style="font-size: 0.75rem; color: #64748b;">
           <?= formatTanggalIndo(date('Y-m-d')) ?> • <span id="liveTime"><?= date('H:i') ?> WIB</span>
         </span>
       </div>
-      <h1 style="font-size: 1.65rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.02em;">
-        Dashboard Eksekutif
+      <h1 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.02em;">
+        Dashboard Eksekutif 🏛️
       </h1>
-      <p style="font-size: 0.875rem; color: #64748b; margin: 0.2rem 0 0 0;">
-        Selamat bertugas, <strong><?= htmlspecialchars($_SESSION['user_nama']) ?></strong>! Semua sistem beroperasi secara optimal.
+      <p style="font-size: 0.78rem; color: #64748b; margin: 0.1rem 0 0 0;">
+        Selamat bertugas, <strong><?= htmlspecialchars($_SESSION['user_nama']) ?></strong>! Seluruh layanan sistem pariwisata beroperasi normal. ✨
       </p>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <a href="<?= BASE_URL ?>admin/destinasi.php?action=add" class="btn btn-primary btn-sm" style="box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <a href="<?= BASE_URL ?>admin/destinasi.php?action=add" class="btn btn-primary btn-sm" style="box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);">
         <i class="fa-solid fa-plus"></i> Tambah Destinasi
       </a>
       <a href="<?= BASE_URL ?>admin/laporan.php" class="btn btn-secondary btn-sm">
@@ -71,11 +71,11 @@ require_once __DIR__ . '/includes/sidebar.php';
   </div>
 
   <!-- Luxury KPI Stat Cards -->
-  <div class="grid grid-cols-4 gap-6 mb-8">
+  <div class="grid grid-cols-4 gap-4 mb-4">
     
     <!-- KPI 1: Pendapatan -->
     <div class="kpi-card-luxury kpi-primary">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
         <div class="kpi-icon-wrap kpi-icon-primary">
           <i class="fa-solid fa-wallet"></i>
         </div>
@@ -84,21 +84,21 @@ require_once __DIR__ . '/includes/sidebar.php';
         </span>
       </div>
       <div>
-        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Total Pendapatan Tiket
         </span>
-        <h2 style="font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0.35rem 0 0.25rem 0; font-family: 'Outfit', sans-serif;">
+        <h2 style="font-size: 1.4rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0.15rem 0; font-family: 'Outfit', sans-serif;">
           <?= formatRupiah($totalOmset) ?>
         </h2>
-        <span style="font-size: 0.75rem; color: #16a34a; font-weight: 600;">
-          <i class="fa-solid fa-circle-check"></i> Dari transaksi terkonfirmasi lunas
+        <span style="font-size: 0.7rem; color: #16a34a; font-weight: 600;">
+          <i class="fa-solid fa-circle-check"></i> Transaksi lunas
         </span>
       </div>
     </div>
 
     <!-- KPI 2: Total Wisatawan -->
     <div class="kpi-card-luxury kpi-success">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
         <div class="kpi-icon-wrap kpi-icon-success">
           <i class="fa-solid fa-users"></i>
         </div>
@@ -107,21 +107,21 @@ require_once __DIR__ . '/includes/sidebar.php';
         </span>
       </div>
       <div>
-        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Total Kunjungan Wisata
         </span>
-        <h2 style="font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0.35rem 0 0.25rem 0; font-family: 'Outfit', sans-serif;">
-          <?= number_format($totalKunjungan) ?> <span style="font-size: 1rem; font-weight: 600; color: #64748b;">Orang</span>
+        <h2 style="font-size: 1.4rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0.15rem 0; font-family: 'Outfit', sans-serif;">
+          <?= number_format($totalKunjungan) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Orang</span>
         </h2>
-        <span style="font-size: 0.75rem; color: #059669; font-weight: 600;">
-          <i class="fa-solid fa-qrcode"></i> Validasi tiket & loket masuk
+        <span style="font-size: 0.7rem; color: #059669; font-weight: 600;">
+          <i class="fa-solid fa-qrcode"></i> Validasi gerbang
         </span>
       </div>
     </div>
 
     <!-- KPI 3: Destinasi -->
     <div class="kpi-card-luxury kpi-warning">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
         <div class="kpi-icon-wrap kpi-icon-warning">
           <i class="fa-solid fa-mountain-sun"></i>
         </div>
@@ -130,21 +130,21 @@ require_once __DIR__ . '/includes/sidebar.php';
         </span>
       </div>
       <div>
-        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Destinasi Terdaftar
         </span>
-        <h2 style="font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0.35rem 0 0.25rem 0; font-family: 'Outfit', sans-serif;">
-          <?= number_format($totalDestinasi) ?> <span style="font-size: 1rem; font-weight: 600; color: #64748b;">Objek</span>
+        <h2 style="font-size: 1.4rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0.15rem 0; font-family: 'Outfit', sans-serif;">
+          <?= number_format($totalDestinasi) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Objek</span>
         </h2>
-        <span style="font-size: 0.75rem; color: #d97706; font-weight: 600;">
-          <i class="fa-solid fa-layer-group"></i> Tersebar di 5 Kategori
+        <span style="font-size: 0.7rem; color: #d97706; font-weight: 600;">
+          <i class="fa-solid fa-layer-group"></i> 5 Kategori
         </span>
       </div>
     </div>
 
     <!-- KPI 4: Users -->
     <div class="kpi-card-luxury kpi-indigo">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
         <div class="kpi-icon-wrap kpi-icon-indigo">
           <i class="fa-solid fa-user-shield"></i>
         </div>
@@ -153,14 +153,14 @@ require_once __DIR__ . '/includes/sidebar.php';
         </span>
       </div>
       <div>
-        <span style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Total Pengguna Sistem
         </span>
-        <h2 style="font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0.35rem 0 0.25rem 0; font-family: 'Outfit', sans-serif;">
-          <?= number_format($totalUsers) ?> <span style="font-size: 1rem; font-weight: 600; color: #64748b;">Akun</span>
+        <h2 style="font-size: 1.4rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0.15rem 0; font-family: 'Outfit', sans-serif;">
+          <?= number_format($totalUsers) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Akun</span>
         </h2>
-        <span style="font-size: 0.75rem; color: #6366f1; font-weight: 600;">
-          <i class="fa-solid fa-users"></i> Admin, Petugas, & Wisatawan
+        <span style="font-size: 0.7rem; color: #6366f1; font-weight: 600;">
+          <i class="fa-solid fa-users"></i> Admin, Petugas, User
         </span>
       </div>
     </div>
@@ -168,60 +168,60 @@ require_once __DIR__ . '/includes/sidebar.php';
   </div>
 
   <!-- Charts & Top Destination Section -->
-  <div class="grid grid-cols-3 gap-8 mb-8">
+  <div class="grid grid-cols-3 gap-4 mb-4">
     
     <!-- Chart Box (Span 2) -->
-    <div class="card p-6 shadow-sm" style="grid-column: span 2; border-radius: 1.25rem; border: 1px solid #e2e8f0; background: #ffffff;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+    <div class="card p-4 shadow-sm" style="grid-column: span 2; border-radius: 0.85rem; border: 1px solid #e2e8f0; background: #ffffff;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
         <div>
-          <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
+          <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">
             Tren Kunjungan 7 Hari Terakhir
           </h3>
-          <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;">
-            Frekuensi kedatangan wisatawan harian yang tercatat di lapangan
+          <p style="font-size: 0.75rem; color: #64748b; margin: 0.1rem 0 0 0;">
+            Frekuensi kedatangan wisatawan harian tercatat di gerbang
           </p>
         </div>
         <span class="badge-luxury badge-luxury-primary">
           <i class="fa-solid fa-chart-line"></i> Grafik Kunjungan
         </span>
       </div>
-      <div style="position: relative; height: 280px; width: 100%;">
+      <div style="position: relative; height: 210px; width: 100%;">
         <canvas id="kunjunganChart"></canvas>
       </div>
     </div>
 
     <!-- Top Destination Leaderboard (Span 1) -->
-    <div class="card p-6 shadow-sm" style="border-radius: 1.25rem; border: 1px solid #e2e8f0; background: #ffffff; display: flex; flex-direction: column;">
-      <div style="margin-bottom: 1rem;">
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
+    <div class="card p-4 shadow-sm" style="border-radius: 0.85rem; border: 1px solid #e2e8f0; background: #ffffff; display: flex; flex-direction: column;">
+      <div style="margin-bottom: 0.65rem;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">
           Top Destinasi Wisata
         </h3>
-        <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;">
-          Objek wisata terpopuler dengan wisatawan tertinggi
+        <p style="font-size: 0.75rem; color: #64748b; margin: 0.1rem 0 0 0;">
+          Objek wisata terpopuler wisatawan
         </p>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1; justify-content: space-around;">
+      <div style="display: flex; flex-direction: column; gap: 0.45rem; flex: 1; justify-content: space-around;">
         <?php foreach ($topDestinasi as $idx => $d): ?>
-          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.85rem; background: #f8fafc; border: 1px solid #f1f5f9; transition: all 0.2s;">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 0.9rem; font-weight: 900; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: <?= $idx === 0 ? '#fef3c7' : ($idx === 1 ? '#f1f5f9' : '#ffffff') ?>; color: <?= $idx === 0 ? '#d97706' : ($idx === 1 ? '#64748b' : '#94a3b8') ?>; border: 1px solid #e2e8f0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.65rem; border-radius: 0.55rem; background: #f8fafc; border: 1px solid #f1f5f9;">
+            <div style="display: flex; align-items: center; gap: 0.55rem;">
+              <span style="font-size: 0.75rem; font-weight: 800; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: <?= $idx === 0 ? '#fef3c7' : ($idx === 1 ? '#f1f5f9' : '#ffffff') ?>; color: <?= $idx === 0 ? '#d97706' : ($idx === 1 ? '#64748b' : '#94a3b8') ?>; border: 1px solid #e2e8f0;">
                 <?= $idx + 1 ?>
               </span>
               <div>
-                <strong style="font-size: 0.875rem; color: #0f172a; display: block; line-height: 1.2;">
+                <strong style="font-size: 0.8rem; color: #0f172a; display: block; line-height: 1.15;">
                   <?= htmlspecialchars($d['nama_destinasi']) ?>
                 </strong>
-                <span style="font-size: 0.72rem; color: #64748b;">
+                <span style="font-size: 0.68rem; color: #64748b;">
                   <?= htmlspecialchars($d['nama_kategori']) ?>
                 </span>
               </div>
             </div>
             <div style="text-align: right;">
-              <strong style="font-size: 0.9rem; color: #0284c7; display: block;">
-                <?= number_format($d['total_wisatawan']) ?> <small style="font-size: 0.7rem; color: #64748b;">Org</small>
+              <strong style="font-size: 0.8rem; color: #0284c7; display: block;">
+                <?= number_format($d['total_wisatawan']) ?> <small style="font-size: 0.65rem; color: #64748b;">Org</small>
               </strong>
-              <div style="font-size: 0.72rem; color: #f59e0b; font-weight: 700;">
+              <div style="font-size: 0.68rem; color: #f59e0b; font-weight: 700;">
                 ★ <?= number_format($d['rating'], 1) ?>
               </div>
             </div>
@@ -234,12 +234,12 @@ require_once __DIR__ . '/includes/sidebar.php';
 
   <!-- Recent Transactions Table -->
   <div class="card-table-luxury">
-    <div style="padding: 1.5rem 1.75rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0;">
+    <div style="padding: 0.75rem 1.15rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0;">
       <div>
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">
+        <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">
           Transaksi Pemesanan Tiket Terbaru
         </h3>
-        <p style="font-size: 0.8rem; color: #64748b; margin: 0.2rem 0 0 0;">
+        <p style="font-size: 0.75rem; color: #64748b; margin: 0.1rem 0 0 0;">
           Daftar pemesanan online langsung dari pengunjung
         </p>
       </div>

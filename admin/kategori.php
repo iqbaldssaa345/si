@@ -149,24 +149,24 @@ require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/includes/sidebar.php';
 $flash = getFlash();
 
-// Preset FontAwesome Icons untuk Wisata
+// Preset Icons & Emote untuk Wisata
 $iconPresets = [
-    ['icon' => 'fa-mountain-sun', 'label' => 'Pegunungan & Alam'],
-    ['icon' => 'fa-umbrella-beach', 'label' => 'Pantai & Bahari'],
-    ['icon' => 'fa-water', 'label' => 'Air Terjun & Danau'],
-    ['icon' => 'fa-tree', 'label' => 'Hutan & Taman Nasional'],
-    ['icon' => 'fa-landmark', 'label' => 'Sejarah & Candi'],
-    ['icon' => 'fa-monument', 'label' => 'Monumen & Ikonik'],
-    ['icon' => 'fa-campground', 'label' => 'Camping & Petualangan'],
-    ['icon' => 'fa-spa', 'label' => 'Pemandian & Relaksasi'],
-    ['icon' => 'fa-masks-theater', 'label' => 'Seni & Budaya'],
-    ['icon' => 'fa-utensils', 'label' => 'Kuliner Nusantara'],
-    ['icon' => 'fa-person-hiking', 'label' => 'Trekking & Outbound'],
-    ['icon' => 'fa-fish', 'label' => 'Akuarium & Bahari'],
-    ['icon' => 'fa-compass', 'label' => 'Eksplorasi Kota'],
-    ['icon' => 'fa-camera', 'label' => 'Spot Foto & Instagramable'],
-    ['icon' => 'fa-mosque', 'label' => 'Wisata Religi'],
-    ['icon' => 'fa-archway', 'label' => 'Taman Hiburan & Wahana']
+    ['icon' => '🎡', 'label' => '🎡 Wahana & Hiburan'],
+    ['icon' => '🎢', 'label' => '🎢 Roller Coaster'],
+    ['icon' => '🏔️', 'label' => '🏔️ Pegunungan & Alam'],
+    ['icon' => '🏖️', 'label' => '🏖️ Pantai & Bahari'],
+    ['icon' => '🏛️', 'label' => '🏛️ Sejarah & Candi'],
+    ['icon' => '🦁', 'label' => '🦁 Satwa & Safari'],
+    ['icon' => '🌿', 'label' => '🌿 Edukasi & Konservasi'],
+    ['icon' => '🌊', 'label' => '🌊 Air Terjun & Danau'],
+    ['icon' => '🏕️', 'label' => '🏕️ Camping Ground'],
+    ['icon' => '🎭', 'label' => '🎭 Seni & Budaya'],
+    ['icon' => 'fa-mountain-sun', 'label' => 'FA Gunung & Alam'],
+    ['icon' => 'fa-umbrella-beach', 'label' => 'FA Pantai & Bahari'],
+    ['icon' => 'fa-landmark', 'label' => 'FA Candi & Sejarah'],
+    ['icon' => 'fa-archway', 'label' => 'FA Taman Hiburan'],
+    ['icon' => 'fa-tree', 'label' => 'FA Hutan Lindung'],
+    ['icon' => 'fa-masks-theater', 'label' => 'FA Seni & Teater']
 ];
 ?>
 
@@ -218,76 +218,76 @@ $iconPresets = [
   <?php endif; ?>
 
   <!-- 4 KPI Stat Widgets -->
-  <div class="grid grid-cols-4 gap-5 mb-6">
+  <div class="grid grid-cols-4 gap-4 mb-4">
     
     <!-- Total Kategori -->
     <a href="<?= BASE_URL ?>admin/kategori.php" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-primary" style="cursor: pointer; padding: 1.25rem; border: <?= $filterStatus === 'all' ? '2px solid #0d9488' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #ccfbf1; color: #0d9488;">
+      <div class="kpi-card-luxury kpi-primary" style="cursor: pointer; border: <?= $filterStatus === 'all' ? '2px solid #0d9488' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-primary">
             <i class="fa-solid fa-layer-group"></i>
           </div>
-          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.7rem;">Semua Data</span>
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">Semua Data</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Total Kategori
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalKategori ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Kategori</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalKategori ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Kategori</span>
         </h3>
       </div>
     </a>
 
     <!-- Total Destinasi Terhubung -->
     <a href="<?= BASE_URL ?>admin/destinasi.php" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-info" style="cursor: pointer; padding: 1.25rem; border: 1px solid #e2e8f0;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #e0f2fe; color: #0284c7;">
+      <div class="kpi-card-luxury kpi-info" style="cursor: pointer; border: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-info">
             <i class="fa-solid fa-map-location-dot"></i>
           </div>
-          <span class="badge-luxury badge-luxury-info" style="font-size: 0.7rem;">Objek Wisata</span>
+          <span class="badge-luxury badge-luxury-info" style="font-size: 0.68rem;">Objek Wisata</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Destinasi Terdaftar
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalDestinasi ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Wisata</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalDestinasi ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Wisata</span>
         </h3>
       </div>
     </a>
 
     <!-- Kategori Populer / Terbanyak -->
     <a href="<?= BASE_URL ?>admin/kategori.php?status=with_dest" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-success" style="cursor: pointer; padding: 1.25rem; border: <?= $filterStatus === 'with_dest' ? '2px solid #059669' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #dcfce7; color: #059669;">
+      <div class="kpi-card-luxury kpi-success" style="cursor: pointer; border: <?= $filterStatus === 'with_dest' ? '2px solid #059669' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-success">
             <i class="fa-solid fa-trophy"></i>
           </div>
-          <span class="badge-luxury badge-luxury-success" style="font-size: 0.7rem;">Terpadat</span>
+          <span class="badge-luxury badge-luxury-success" style="font-size: 0.68rem;">Terpadat</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Kategori Terbanyak
         </span>
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($topKategori['nama_kategori'] ?? '-') ?>">
-          <?= htmlspecialchars($topKategori['nama_kategori'] ?? '-') ?> <span style="font-size: 0.8rem; font-weight: 600; color: #059669;">(<?= $topKategori['cnt'] ?? 0 ?>)</span>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($topKategori['nama_kategori'] ?? '-') ?>">
+          <?= htmlspecialchars($topKategori['nama_kategori'] ?? '-') ?> <span style="font-size: 0.78rem; font-weight: 600; color: #059669;">(<?= $topKategori['cnt'] ?? 0 ?>)</span>
         </h3>
       </div>
     </a>
 
     <!-- Kategori Belum Ada Konten -->
     <a href="<?= BASE_URL ?>admin/kategori.php?status=empty_dest" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; padding: 1.25rem; border: <?= $filterStatus === 'empty_dest' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #fef3c7; color: #d97706;">
+      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; border: <?= $filterStatus === 'empty_dest' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-warning">
             <i class="fa-solid fa-folder-open"></i>
           </div>
-          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.7rem;">Perlu Konten</span>
+          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.68rem;">Perlu Konten</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Kategori Kosong
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $emptyKategoriCount ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Kategori</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $emptyKategoriCount ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Kategori</span>
         </h3>
       </div>
     </a>
@@ -344,16 +344,16 @@ $iconPresets = [
             
             <div class="grid grid-cols-4 gap-2 mb-3" style="max-height: 140px; overflow-y: auto; padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem;">
               <?php foreach ($iconPresets as $preset): ?>
-                <button type="button" class="btn-preset-icon <?= (($kategoriData['icon'] ?? 'fa-mountain-sun') === $preset['icon']) ? 'active' : '' ?>" onclick="selectPresetIcon('<?= $preset['icon'] ?>')" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: #ffffff; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 0.75rem;">
-                  <i class="fa-solid <?= $preset['icon'] ?>" style="color: #0d9488; font-size: 0.9rem; width: 16px; text-align: center;"></i>
-                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;"><?= $preset['label'] ?></span>
+                <button type="button" class="btn-preset-icon <?= (($kategoriData['icon'] ?? 'fa-mountain-sun') === $preset['icon']) ? 'active' : '' ?>" onclick="selectPresetIcon('<?= $preset['icon'] ?>')" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.55rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: #ffffff; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 0.75rem;">
+                  <span style="font-size: 1.05rem; width: 22px; text-align: center; display: inline-flex; align-items: center; justify-content: center;"><?= renderKategoriIcon($preset['icon'], 'fa-shapes') ?></span>
+                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; font-weight: 600;"><?= $preset['label'] ?></span>
                 </button>
               <?php endforeach; ?>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Custom Icon Class:</span>
-              <input type="text" name="icon" id="inputIconClass" class="form-control text-sm" value="<?= htmlspecialchars($kategoriData['icon'] ?? 'fa-mountain-sun') ?>" placeholder="fa-mountain-sun" style="font-family: monospace; max-width: 250px;" oninput="updatePreview()">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Icon Class / Emote:</span>
+              <input type="text" name="icon" id="inputIconClass" class="form-control text-sm" value="<?= htmlspecialchars($kategoriData['icon'] ?? 'fa-mountain-sun') ?>" placeholder="Cth: 🎡, 🎢, 🏔️ atau fa-mountain-sun" style="max-width: 320px;" oninput="updatePreview()">
             </div>
           </div>
 
@@ -380,8 +380,8 @@ $iconPresets = [
 
               <!-- Visitor Card Mockup -->
               <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.85rem; padding: 1.25rem; text-align: center; backdrop-filter: blur(8px);">
-                <div id="previewIconWrap" style="width: 52px; height: 52px; border-radius: 1rem; background: linear-gradient(135deg, #0d9488, #059669); color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 0.75rem; box-shadow: 0 8px 16px rgba(13, 148, 136, 0.35);">
-                  <i class="fa-solid <?= htmlspecialchars($kategoriData['icon'] ?? 'fa-mountain-sun') ?>" id="previewIcon"></i>
+                <div id="previewIconWrap" style="width: 56px; height: 56px; border-radius: 1.15rem; background: linear-gradient(135deg, #0d9488, #059669); color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; margin-bottom: 0.75rem; box-shadow: 0 8px 16px rgba(13, 148, 136, 0.35);">
+                  <?= renderKategoriIcon($kategoriData['icon'] ?? 'fa-mountain-sun', 'fa-mountain-sun', 'preview-inner-icon') ?>
                 </div>
                 
                 <h4 id="previewTitle" style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 0.35rem 0; font-family: 'Outfit', sans-serif;">
@@ -426,35 +426,32 @@ $iconPresets = [
   </div>
 
   <!-- Filter, Search & Export Toolbar -->
-  <div class="card p-4 shadow-sm mb-6 bg-white" style="border-radius: 1rem; border: 1px solid #e2e8f0;">
-    <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+  <div class="card p-3 shadow-sm mb-4 bg-white" style="border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
       
       <!-- Filter Tabs / Pills -->
-      <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-        <a href="<?= BASE_URL ?>admin/kategori.php?status=all<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn-filter-pill <?= $filterStatus === 'all' ? 'active' : '' ?>">
+      <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+        <a href="<?= BASE_URL ?>admin/kategori.php?status=all<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $filterStatus === 'all' ? 'btn-primary' : 'btn-secondary' ?>">
           Semua (<?= $totalKategori ?>)
         </a>
-        <a href="<?= BASE_URL ?>admin/kategori.php?status=with_dest<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn-filter-pill <?= $filterStatus === 'with_dest' ? 'active' : '' ?>">
-          <i class="fa-solid fa-circle-check text-success"></i> Memiliki Wisata (<?= $totalKategori - $emptyKategoriCount ?>)
+        <a href="<?= BASE_URL ?>admin/kategori.php?status=with_dest<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $filterStatus === 'with_dest' ? 'btn-primary' : 'btn-secondary' ?>">
+          <i class="fa-solid fa-circle-check text-emerald"></i> Ada Wisata (<?= $totalKategori - $emptyKategoriCount ?>)
         </a>
-        <a href="<?= BASE_URL ?>admin/kategori.php?status=empty_dest<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn-filter-pill <?= $filterStatus === 'empty_dest' ? 'active' : '' ?>">
-          <i class="fa-solid fa-circle-exclamation text-warning"></i> Kosong / Butuh Konten (<?= $emptyKategoriCount ?>)
+        <a href="<?= BASE_URL ?>admin/kategori.php?status=empty_dest<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $filterStatus === 'empty_dest' ? 'btn-primary' : 'btn-secondary' ?>">
+          <i class="fa-solid fa-circle-exclamation text-amber"></i> Kosong (<?= $emptyKategoriCount ?>)
         </a>
       </div>
 
       <!-- Live Search & Actions -->
-      <div style="display: flex; align-items: center; gap: 0.5rem; flex: 1; max-width: 480px; justify-content: flex-end;">
-        <form action="<?= BASE_URL ?>admin/kategori.php" method="GET" style="display: flex; width: 100%; gap: 0.4rem;">
+      <div style="display: flex; align-items: center; gap: 0.4rem; flex: 1; max-width: 400px; justify-content: flex-end;">
+        <form action="<?= BASE_URL ?>admin/kategori.php" method="GET" style="display: flex; width: 100%; gap: 0.35rem;">
           <?php if (!empty($filterStatus) && $filterStatus !== 'all'): ?>
             <input type="hidden" name="status" value="<?= htmlspecialchars($filterStatus) ?>">
           <?php endif; ?>
-          <div style="position: relative; flex: 1;">
-            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.85rem;"></i>
-            <input type="text" name="q" id="tableSearchInput" class="form-control text-sm" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama kategori, slug, deskripsi..." style="padding-left: 2.25rem; border-radius: 0.65rem;" onkeyup="clientFilterTable()">
-          </div>
-          <button type="submit" class="btn btn-secondary btn-sm" style="border-radius: 0.65rem;">Cari</button>
+          <input type="text" name="q" id="tableSearchInput" class="form-control" value="<?= htmlspecialchars($search) ?>" placeholder="Cari nama kategori..." style="padding: 0.35rem 0.65rem; font-size: 0.78rem;" onkeyup="clientFilterTable()">
+          <button type="submit" class="btn btn-primary btn-sm">Cari</button>
           <?php if (!empty($search)): ?>
-            <a href="<?= BASE_URL ?>admin/kategori.php<?= $filterStatus !== 'all' ? '?status=' . urlencode($filterStatus) : '' ?>" class="btn btn-secondary btn-sm" style="border-radius: 0.65rem;" title="Reset Pencarian">
+            <a href="<?= BASE_URL ?>admin/kategori.php<?= $filterStatus !== 'all' ? '?status=' . urlencode($filterStatus) : '' ?>" class="btn btn-secondary btn-sm" title="Reset">
               <i class="fa-solid fa-xmark"></i>
             </a>
           <?php endif; ?>
@@ -465,23 +462,20 @@ $iconPresets = [
   </div>
 
   <!-- Luxury Data Table (100% Full Width) -->
-  <div class="card-table-luxury" style="width: 100%;">
-    <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+  <div class="card-table-luxury">
+    <div class="card-table-header">
       <div>
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
           Daftar Master Kategori Wisata 
-          <span style="font-size: 0.8rem; font-weight: 700; color: #0d9488; background: #ccfbf1; padding: 0.15rem 0.6rem; border-radius: 9999px;">
-            <?= count($kategoriList) ?> Data
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">
+            <?= count($kategoriList) ?> Kategori
           </span>
         </h3>
-        <p style="font-size: 0.78rem; color: #64748b; margin: 0.15rem 0 0 0;">
-          Daftar kategori objek wisata terdaftar beserta jumlah destinasi aktif yang terhubung.
-        </p>
       </div>
 
-      <div style="display: flex; gap: 0.4rem;">
-        <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.78rem;">
-          <i class="fa-solid fa-print"></i> Cetak Daftar
+      <div style="display: flex; gap: 0.35rem;">
+        <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-print"></i> Cetak
         </button>
       </div>
     </div>
@@ -525,8 +519,8 @@ $iconPresets = [
                   <?= $no++ ?>
                 </td>
                 <td style="text-align: center;">
-                  <div class="kategori-avatar-icon" style="width: 44px; height: 44px; border-radius: 0.85rem; margin: 0 auto; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; background: linear-gradient(135deg, #ccfbf1 0%, #e0f2fe 100%); color: #0d9488; border: 1px solid #99f6e4; box-shadow: 0 2px 6px rgba(13, 148, 136, 0.12);">
-                    <i class="fa-solid <?= htmlspecialchars($k['icon'] ?? 'fa-map-pin') ?>"></i>
+                  <div class="kategori-avatar-icon" style="width: 44px; height: 44px; border-radius: 0.85rem; margin: 0 auto; display: inline-flex; align-items: center; justify-content: center; font-size: 1.35rem; background: linear-gradient(135deg, #ccfbf1 0%, #e0f2fe 100%); color: #0d9488; border: 1px solid #99f6e4; box-shadow: 0 2px 6px rgba(13, 148, 136, 0.12);">
+                    <?= renderKategoriIcon($k['icon'] ?? 'fa-map-pin') ?>
                   </div>
                 </td>
                 <td>
@@ -718,15 +712,24 @@ function regenerateSlug() {
 function updatePreview() {
   const nama = document.getElementById('inputNamaKategori').value || 'Nama Kategori Wisata';
   const slug = document.getElementById('inputSlug').value || 'slug-kategori';
-  const icon = document.getElementById('inputIconClass').value || 'fa-mountain-sun';
+  const icon = document.getElementById('inputIconClass').value.trim() || 'fa-mountain-sun';
   const desc = document.getElementById('inputDeskripsi').value || 'Deskripsi singkat mengenai kategori objek wisata ini akan tampil di katalog pengunjung.';
 
   document.getElementById('previewTitle').innerText = nama;
   document.getElementById('previewSlug').innerText = slug;
   document.getElementById('previewDesc').innerText = desc;
   
-  const pIcon = document.getElementById('previewIcon');
-  pIcon.className = 'fa-solid ' + icon;
+  const pWrap = document.getElementById('previewIconWrap');
+  if (pWrap) {
+    const isFa = (icon.indexOf('fa-') === 0 || icon.indexOf('fa ') === 0 || icon.indexOf('fa-solid ') === 0 || icon.indexOf('fas ') === 0);
+    if (!isFa || icon.match(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u)) {
+      pWrap.innerHTML = `<span class="kategori-emote-icon" style="font-size: 1.8rem; line-height: 1;">${icon}</span>`;
+    } else {
+      let cleanFa = icon.replace('fa-solid ', '').replace('fa ', '').trim();
+      if (cleanFa.indexOf('fa-') !== 0) cleanFa = 'fa-' + cleanFa;
+      pWrap.innerHTML = `<i class="fa-solid ${cleanFa}"></i>`;
+    }
+  }
 }
 
 // Client-side quick filter for real-time responsiveness

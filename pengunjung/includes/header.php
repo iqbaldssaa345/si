@@ -21,7 +21,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Member Area' : 'Dashboard Wisa
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- App Style -->
-  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/style.css?v=<?= time() ?>">
 
   <style>
     :root {
@@ -66,10 +66,14 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Member Area' : 'Dashboard Wisa
       position: sticky;
       top: 0;
       height: 100vh;
+      max-height: 100vh;
       overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
       z-index: 50;
       border-right: 1px solid rgba(255,255,255,0.08);
     }
+    .admin-sidebar::-webkit-scrollbar { display: none; width: 0; }
 
     .admin-main {
       flex: 1;

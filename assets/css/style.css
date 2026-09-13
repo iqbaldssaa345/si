@@ -2475,5 +2475,1815 @@ img {
   .btn-float-action { width: 44px; height: 44px; font-size: 1.15rem; }
 }
 
+/* ==========================================================================
+   ULTRA-LUXURY DESIGN SYSTEM EXTENSIONS (PESONA NUSANTARA)
+   State-of-the-Art Visual Aesthetics, Glassmorphism, Micro-Animations & Responsive Fit
+   ========================================================================== */
 
+/* Color & Badge Utility Classes */
+.text-amber { color: #f59e0b !important; }
+.text-teal { color: #0d9488 !important; }
+.text-emerald { color: #10b981 !important; }
+.text-blue { color: #0284c7 !important; }
+.text-cyan { color: #06b6d4 !important; }
+
+.badge-accent {
+  background: rgba(245, 158, 11, 0.14);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  font-weight: 700;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  font-weight: 700;
+}
+
+.badge-primary {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0f766e;
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  font-weight: 700;
+}
+
+.badge-light {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
+}
+
+.shadow-glow {
+  box-shadow: 0 8px 25px rgba(13, 148, 136, 0.4) !important;
+}
+
+.shadow-glow-gold {
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45) !important;
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff !important;
+  font-weight: 700;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   1. EXECUTIVE REAL-TIME LIVE STATUS BAR
+   ========================================================================== */
+.live-luxury-topbar {
+  background: #090d16;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 60;
+  padding: 0.55rem 0;
+  font-size: 0.8rem;
+}
+
+.live-luxury-topbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0d9488 0%, #38bdf8 35%, #f59e0b 70%, #10b981 100%);
+  z-index: 2;
+}
+
+.live-luxury-topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.live-status-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.live-greeting-pill,
+.live-date-pill,
+.live-weather-pill,
+.live-clock-pill,
+.live-vip-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.85rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  font-weight: 600;
+  color: #e2e8f0;
+  font-size: 0.78rem;
+  transition: all 0.25s ease;
+}
+
+.live-greeting-pill {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.08));
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fef08a;
+}
+
+.live-date-pill {
+  background: rgba(13, 148, 136, 0.1);
+  border-color: rgba(13, 148, 136, 0.25);
+  color: #99f6e4;
+}
+
+.live-weather-pill {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.2);
+  color: #bae6fd;
+}
+
+.live-clock-pill {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.04em;
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.clock-colon {
+  animation: blink-colon 1s infinite;
+  display: inline-block;
+  color: #38bdf8;
+}
+
+.live-gate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.85rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 9999px;
+  color: #34d399;
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+}
+
+.live-gate-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pulse-gate 2s infinite;
+}
+
+.live-vip-pill {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.15), rgba(18, 140, 126, 0.12));
+  border-color: rgba(37, 211, 102, 0.35);
+  color: #86efac;
+  text-decoration: none;
+}
+
+.live-vip-pill:hover {
+  background: rgba(37, 211, 102, 0.25);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@keyframes pulse-gate {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* ==========================================================================
+   2. HERO SECTION ULTRA LUXURY WITH REAL-TIME HUD
+   ========================================================================== */
+.hero-luxury-wrapper {
+  position: relative;
+  background: radial-gradient(circle at 15% 15%, rgba(13, 148, 136, 0.28) 0%, transparent 45%),
+              radial-gradient(circle at 85% 20%, rgba(2, 132, 199, 0.25) 0%, transparent 40%),
+              radial-gradient(circle at 50% 90%, rgba(245, 158, 11, 0.16) 0%, transparent 45%),
+              linear-gradient(160deg, #051415 0%, #06232e 45%, #08121f 100%);
+  padding: 5rem 0 6.5rem;
+  overflow: hidden;
+  color: #ffffff;
+  text-align: center;
+}
+
+.hero-luxury-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.hero-luxury-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to top, #f8fafc 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-announcement-ticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 1.35rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.03em;
+}
+
+.hero-announcement-ticker .ticker-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 12px #f59e0b;
+  animation: pulse-gate 2s infinite;
+}
+
+.hero-title-luxury {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(2.4rem, 4.6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.35rem;
+  color: #ffffff;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+}
+
+.hero-title-gradient {
+  background: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 45%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 2px 10px rgba(45, 212, 191, 0.3));
+}
+
+.hero-subtitle-luxury {
+  max-width: 780px;
+  margin: 0 auto 2.5rem;
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  color: #cbd5e1;
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+/* Luxury Interactive Live Clock HUD */
+.hero-clock-hud {
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1.5rem;
+  padding: 1rem 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 35px rgba(13, 148, 136, 0.2);
+  margin-bottom: 2.75rem;
+  flex-wrap: wrap;
+}
+
+.hero-clock-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.hero-clock-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.3) 0%, rgba(2, 132, 199, 0.25) 100%);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #2dd4bf;
+  flex-shrink: 0;
+}
+
+.hero-clock-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-bottom: 0.15rem;
+}
+
+.hero-clock-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.hero-clock-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Luxury Interactive Search Console */
+.hero-search-container {
+  max-width: 960px;
+  margin: 0 auto 3.25rem;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1.75rem;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), 0 0 50px rgba(13, 148, 136, 0.2);
+  text-align: left;
+}
+
+.hero-search-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.85rem;
+  overflow-x: auto;
+}
+
+.search-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.search-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.search-tab-btn.active {
+  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 18px rgba(13, 148, 136, 0.45);
+}
+
+.search-fields-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr auto;
+  gap: 1.15rem;
+  align-items: flex-end;
+}
+
+.search-field-luxury {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.search-field-luxury label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-wrapper .field-icon {
+  position: absolute;
+  left: 1.15rem;
+  color: #2dd4bf;
+  font-size: 1.05rem;
+  pointer-events: none;
+}
+
+.search-input-wrapper input,
+.search-input-wrapper select {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.search-input-wrapper input::placeholder {
+  color: #64748b;
+  font-weight: 400;
+}
+
+.search-input-wrapper select option {
+  background-color: #0f172a;
+  color: #ffffff;
+}
+
+.search-input-wrapper input:focus,
+.search-input-wrapper select:focus {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #2dd4bf;
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.25);
+}
+
+.btn-search-luxury {
+  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.95rem 2rem;
+  font-size: 0.98rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 25px rgba(13, 148, 136, 0.45);
+  white-space: nowrap;
+  height: 52px;
+}
+
+.btn-search-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(13, 148, 136, 0.6);
+  background: linear-gradient(135deg, #0f766e 0%, #0369a1 100%);
+}
+
+.hero-trending-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.35rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+}
+
+.trending-label {
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.trending-chip {
+  padding: 0.3rem 0.85rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  color: #cbd5e1;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.trending-chip:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border-color: #2dd4bf;
+  transform: translateY(-2px);
+}
+
+/* Luxury Hero Stats */
+.hero-stats-luxury {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.35rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-stat-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1.35rem;
+  padding: 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-stat-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(45, 212, 191, 0.45);
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.35);
+}
+
+.hero-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.3), rgba(2, 132, 199, 0.25));
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #2dd4bf;
+  flex-shrink: 0;
+}
+
+.hero-stat-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.hero-stat-desc {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   3. FEATURE PILLARS SECTION (4 KEUNGGULAN UTAMA)
+   ========================================================================== */
+.feature-pillars-section {
+  margin-top: -3.5rem;
+  position: relative;
+  z-index: 30;
+  margin-bottom: 3.5rem;
+}
+
+.pillar-card {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2rem 1.6rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0d9488, #0284c7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 45px rgba(13, 148, 136, 0.15);
+  border-color: #99f6e4;
+}
+
+.pillar-card:hover::before {
+  opacity: 1;
+}
+
+.pillar-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  margin: 0 auto 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.55rem;
+  transition: all 0.35s ease;
+}
+
+.pillar-card:hover .pillar-icon-box {
+  transform: scale(1.1) rotate(6deg);
+}
+
+.pillar-icon-teal {
+  background: linear-gradient(135deg, #ccfbf1, #99f6e4);
+  color: #0d9488;
+}
+
+.pillar-icon-amber {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #d97706;
+}
+
+.pillar-icon-blue {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  color: #0284c7;
+}
+
+.pillar-icon-emerald {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  color: #059669;
+}
+
+.pillar-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.55rem;
+}
+
+.pillar-desc {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   4. KATEGORI WISATA SECTION
+   ========================================================================== */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.35rem;
+}
+
+.category-card-luxury {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  padding: 2rem 1.35rem;
+  text-align: center;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card-luxury:hover {
+  transform: translateY(-8px);
+  border-color: #0d9488;
+  box-shadow: 0 20px 40px rgba(13, 148, 136, 0.15);
+}
+
+.category-icon-luxury {
+  width: 66px;
+  height: 66px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+  color: #0d9488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  margin-bottom: 1.15rem;
+  transition: all 0.35s ease;
+}
+
+.category-card-luxury:hover .category-icon-luxury {
+  background: linear-gradient(135deg, #0d9488, #0284c7);
+  color: #ffffff;
+  transform: rotate(6deg) scale(1.08);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.35);
+}
+
+.kategori-emote-icon {
+  font-size: 2.25rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+  transform: scale(1.05);
+  transition: transform 0.35s ease;
+}
+
+.category-card-luxury:hover .kategori-emote-icon {
+  transform: scale(1.22) rotate(6deg);
+}
+
+.filter-pill-btn .kategori-emote-icon {
+  font-size: 1.15rem;
+  margin-right: 0.15rem;
+}
+
+.kategori-avatar-icon .kategori-emote-icon {
+  font-size: 1.5rem;
+}
+
+.category-title-luxury {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.4rem;
+}
+
+.category-pill-count {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.category-card-luxury:hover .category-pill-count {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+/* ==========================================================================
+   5. DESTINASI UNGGULAN SHOWCASE
+   ========================================================================== */
+.filter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  overflow-x: auto;
+  padding-bottom: 0.65rem;
+}
+
+.filter-pill-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  padding: 0.6rem 1.35rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.filter-pill-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.filter-pill-btn.active {
+  background: linear-gradient(135deg, #0d9488, #0284c7);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 18px rgba(13, 148, 136, 0.38);
+}
+
+.destinasi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.destinasi-card-luxury {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.destinasi-card-luxury:hover {
+  transform: translateY(-9px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+  border-color: #cbd5e1;
+}
+
+.destinasi-img-container {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.destinasi-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.destinasi-card-luxury:hover .destinasi-img-container img {
+  transform: scale(1.08);
+}
+
+.destinasi-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.1) 45%, transparent 100%);
+}
+
+.badge-category-glass {
+  position: absolute;
+  top: 1.15rem;
+  left: 1.15rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.badge-discount-glass {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.15rem;
+  padding: 0.35rem 0.85rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.45);
+}
+
+.destinasi-card-body {
+  padding: 1.65rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.destinasi-meta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.rating-badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.rating-badge-gold i {
+  color: #f59e0b;
+}
+
+.destinasi-title {
+  font-size: 1.28rem;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
+  line-height: 1.35;
+}
+
+.destinasi-title a {
+  color: #0f172a;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.destinasi-title a:hover {
+  color: #0d9488;
+}
+
+.destinasi-excerpt {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin-bottom: 1.35rem;
+  flex: 1;
+}
+
+.destinasi-footer-box {
+  padding-top: 1.15rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.destinasi-price-tag {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.price-nominal-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.32rem;
+  font-weight: 900;
+  color: #0d9488;
+}
+
+/* ==========================================================================
+   6. LUXURY INTERACTIVE LIVE CALCULATOR WIDGET
+   ========================================================================== */
+.luxury-calc-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+  border: 2px solid #ccfbf1;
+  border-radius: 1.85rem;
+  padding: 2.75rem;
+  box-shadow: 0 20px 50px rgba(13, 148, 136, 0.08);
+}
+
+.stepper-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stepper-btn:hover {
+  background: #0d9488;
+  color: #ffffff;
+  border-color: #0d9488;
+}
+
+.quick-qty-chip {
+  padding: 0.4rem 0.95rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-qty-chip:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.quick-qty-chip.active {
+  background: #0d9488;
+  color: #ffffff;
+  border-color: #0d9488;
+  box-shadow: 0 3px 10px rgba(13, 148, 136, 0.35);
+}
+
+/* ==========================================================================
+   7. VIP GROUP & CORPORATE TRAVEL PRIVILEGE BANNER
+   ========================================================================== */
+.vip-promo-banner {
+  background: radial-gradient(circle at 85% 40%, rgba(13, 148, 136, 0.35) 0%, transparent 50%),
+              linear-gradient(135deg, #042f2e 0%, #090d16 65%, #05141b 100%);
+  border-radius: 1.85rem;
+  padding: 3.5rem;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ==========================================================================
+   8. 4-STEP JOURNEY (ALUR RESERVASI PRAKTIS)
+   ========================================================================== */
+.journey-step-card {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2.25rem 1.65rem;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.journey-step-card:hover {
+  transform: translateY(-7px);
+  border-color: #0d9488;
+  box-shadow: 0 20px 40px rgba(13, 148, 136, 0.12);
+}
+
+.journey-step-num {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.35rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ==========================================================================
+   9. TESTIMONI WISATAWAN
+   ========================================================================== */
+.testimonial-card-luxury {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card-luxury:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+/* ==========================================================================
+   10. FAQ LUXURY ACCORDION
+   ========================================================================== */
+.faq-item-luxury {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.15rem;
+  margin-bottom: 0.85rem;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.faq-header-luxury {
+  padding: 1.35rem 1.65rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.15rem;
+  user-select: none;
+}
+
+.faq-icon-chevron {
+  color: #94a3b8;
+  transition: transform 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.faq-item-luxury.active .faq-icon-chevron {
+  transform: rotate(180deg);
+  color: #0d9488;
+}
+
+.faq-body-luxury {
+  padding: 0 1.65rem 1.35rem;
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.75;
+  display: none;
+}
+
+.faq-item-luxury.active .faq-body-luxury {
+  display: block;
+}
+
+/* ==========================================================================
+   11. FLOATING QUICK CONCIERGE & SCROLL DOCK
+   ========================================================================== */
+.floating-quick-dock {
+  position: fixed;
+  bottom: 2.25rem;
+  right: 2.25rem;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: flex-end;
+}
+
+.btn-float-action {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-float-wa {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  position: relative;
+}
+
+.btn-float-wa::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #25d366;
+  opacity: 0;
+  animation: pulse-gate 2s infinite;
+}
+
+.btn-float-top {
+  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+}
+
+.btn-float-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-float-action:hover {
+  transform: scale(1.12) translateY(-3px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   12. RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 992px) {
+  .hero-title-luxury { font-size: 2.6rem; }
+  .search-fields-grid { grid-template-columns: 1fr; }
+  .btn-search-luxury { width: 100%; }
+  .hero-stats-luxury { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-2 { grid-template-columns: 1fr; }
+  .vip-promo-banner { padding: 2.25rem 1.75rem; }
+  .luxury-calc-container { padding: 1.75rem 1.5rem; }
+}
+
+@media (max-width: 640px) {
+  .hero-luxury-wrapper { padding: 3.5rem 0 5rem; }
+  .hero-title-luxury { font-size: 2rem; }
+  .hero-clock-hud { padding: 0.85rem 1rem; gap: 0.85rem; }
+  .hero-clock-divider { display: none; }
+  .hero-search-container { padding: 1.25rem 1.15rem; }
+  .hero-stats-luxury { grid-template-columns: 1fr; }
+  .grid-cols-4 { grid-template-columns: 1fr; }
+  .destinasi-grid { grid-template-columns: 1fr; }
+  .live-luxury-topbar-inner { justify-content: center; }
+  .live-status-group { justify-content: center; gap: 0.5rem; }
+  .floating-quick-dock { bottom: 1.25rem; right: 1.25rem; }
+  .btn-float-action { width: 46px; height: 46px; font-size: 1.2rem; }
+}
+
+/* ==========================================================================
+   ADMIN, PETUGAS & PENGUNJUNG PORTAL LUXURY DESIGN SYSTEM (100% FIT GEOMETRY)
+   ========================================================================== */
+
+body.admin-body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+  font-size: 0.825rem;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.admin-body h1, 
+body.admin-body h2, 
+body.admin-body h3, 
+body.admin-body h4, 
+body.admin-body h5 {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Portal Geometry */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f1f5f9;
+}
+
+/* Sidebar Luxury - Compact 100vh Fit & Docking */
+.admin-sidebar {
+  width: 230px;
+  min-width: 230px;
+  background: linear-gradient(180deg, #090d16 0%, #0c1427 50%, #0f172a 100%);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
+  z-index: 50;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+
+.admin-sidebar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.admin-sidebar-brand {
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+}
+
+.admin-brand-icon-luxury {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.admin-icon-admin {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25), inset 0 0 8px rgba(245, 158, 11, 0.15);
+}
+
+.admin-icon-petugas {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%);
+  border: 1px solid rgba(45, 212, 191, 0.4);
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.25), inset 0 0 8px rgba(45, 212, 191, 0.15);
+}
+
+.admin-icon-pengunjung {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.15) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25), inset 0 0 8px rgba(56, 189, 248, 0.15);
+}
+
+.luxury-emote-brand {
+  display: inline-block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transform: translateZ(0);
+  transition: transform 0.2s ease;
+}
+
+.admin-brand-icon-luxury:hover .luxury-emote-brand {
+  transform: scale(1.15) rotate(6deg);
+}
+
+.admin-profile-pill {
+  margin: 0.25rem 0.6rem 0.15rem 0.6rem;
+  padding: 0.3rem 0.55rem;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.admin-profile-pill:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(45, 212, 191, 0.3);
+}
+
+.admin-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d9488, #0284c7);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3);
+}
+
+.admin-nav-list {
+  list-style: none;
+  padding: 0.15rem 0.5rem;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-nav-section-title {
+  padding: 0.3rem 0.45rem 0.1rem 0.45rem;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+.admin-nav-item {
+  margin-bottom: 0.08rem;
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.55rem;
+  color: #94a3b8;
+  font-size: 0.77rem;
+  font-weight: 600;
+  border-radius: 0.45rem;
+  transition: all 0.18s ease;
+  text-decoration: none;
+}
+
+.admin-nav-link i {
+  font-size: 0.82rem;
+  width: 16px;
+  text-align: center;
+  color: #64748b;
+  transition: color 0.18s ease;
+}
+
+.admin-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-nav-link:hover i {
+  color: #2dd4bf;
+}
+
+.admin-nav-link.active {
+  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(13, 148, 136, 0.35);
+}
+
+.admin-nav-link.active i {
+  color: #ffffff;
+}
+
+.admin-nav-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  padding: 0.08rem 0.4rem;
+  border-radius: 9999px;
+  line-height: 1.2;
+}
+
+.admin-nav-badge-danger {
+  background: #ef4444;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.admin-nav-badge-info {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+}
+
+.admin-sidebar-footer {
+  margin-top: auto;
+  padding: 0.45rem 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
+.admin-footer-logout-single {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.42rem 0.65rem;
+  border-radius: 0.55rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.admin-footer-logout-single:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 3px 12px rgba(239, 68, 68, 0.35);
+  transform: translateY(-1px);
+}
+
+.admin-footer-logout-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.admin-footer-logout-single:hover .admin-footer-logout-icon {
+  transform: translateX(2px);
+}
+
+/* Main Content Area - 100% Precision */
+.admin-main {
+  flex: 1;
+  padding: 0.85rem 1.25rem 2rem 1.25rem;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Topbar Luxury */
+.admin-topbar-luxury {
+  background: #ffffff;
+  padding: 0.65rem 1.15rem;
+  border-radius: 0.85rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* KPI Stat Cards - Compact & Crisp */
+.kpi-card-luxury {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.kpi-card-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px -3px rgba(15, 23, 42, 0.06);
+  border-color: #cbd5e1;
+}
+
+.kpi-card-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.kpi-primary::before { background: linear-gradient(90deg, #0d9488, #0284c7); }
+.kpi-success::before { background: linear-gradient(90deg, #10b981, #059669); }
+.kpi-warning::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.kpi-info::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+.kpi-indigo::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+.kpi-purple::before { background: linear-gradient(90deg, #8b5cf6, #ec4899); }
+
+.kpi-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 0.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+}
+
+.kpi-icon-primary { background: #ccfbf1; color: #0d9488; }
+.kpi-icon-success { background: #dcfce7; color: #16a34a; }
+.kpi-icon-warning { background: #fef3c7; color: #d97706; }
+.kpi-icon-info { background: #e0f2fe; color: #0284c7; }
+.kpi-icon-indigo { background: #e0e7ff; color: #4f46e5; }
+.kpi-icon-purple { background: #f3e8ff; color: #7e22ce; }
+
+.kpi-badge-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.trend-up {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.trend-down {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.trend-info {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+/* Badges System */
+.badge-luxury {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.badge-luxury-primary {
+  background: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+}
+
+.badge-luxury-success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-luxury-warning {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.badge-luxury-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.badge-luxury-purple {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+
+/* Card Table Luxury */
+.card-table-luxury {
+  background: #ffffff;
+  border-radius: 0.85rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+.card-table-header {
+  padding: 0.75rem 1.15rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.table-luxury {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.table-luxury th {
+  background: #f8fafc;
+  padding: 0.6rem 0.95rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.table-luxury td {
+  padding: 0.6rem 0.95rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  color: #334155;
+}
+
+.table-luxury tr:last-child td {
+  border-bottom: none;
+}
+
+.table-luxury tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Forms in Admin */
+body.admin-body .form-group {
+  margin-bottom: 0.75rem;
+}
+
+body.admin-body .form-label {
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+body.admin-body .form-control {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.825rem;
+  border-radius: 0.55rem;
+  border: 1px solid #cbd5e1;
+}
+
+body.admin-body .btn {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.825rem;
+  border-radius: 0.55rem;
+}
+
+body.admin-body .btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: 0.45rem;
+}
+
+/* Grid Spacings Fitted */
+body.admin-body .gap-6 { gap: 0.85rem !important; }
+body.admin-body .gap-8 { gap: 0.85rem !important; }
+body.admin-body .mb-8 { margin-bottom: 0.85rem !important; }
+body.admin-body .p-6 { padding: 0.85rem 1.15rem !important; }
+body.admin-body .p-8 { padding: 1rem 1.25rem !important; }
+
+/* Modals */
+.luxury-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.luxury-modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.luxury-modal-box {
+  background: #ffffff;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transform: scale(0.94) translateY(8px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.luxury-modal-backdrop.active .luxury-modal-box {
+  transform: scale(1) translateY(0);
+}
+
+@media (max-width: 768px) {
+  .admin-layout { flex-direction: column; }
+  .admin-sidebar { width: 100%; height: auto; position: relative; }
+  .admin-main { padding: 0.75rem; }
+  .admin-topbar-luxury { flex-direction: column; align-items: flex-start; }
+}
 

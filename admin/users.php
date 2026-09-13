@@ -46,12 +46,20 @@ if ($action === 'delete' && $id > 0) {
 // ==========================================
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $nama = trim($_POST['nama'] ?? '');
+    $username = strtolower(trim($_POST['username'] ?? ''));
     $email = strtolower(trim($_POST['email'] ?? ''));
     $no_telp = trim($_POST['no_telp'] ?? '');
     $role = $_POST['role'] ?? 'pengunjung';
     $password = trim($_POST['password'] ?? '');
     $fotoLama = $_POST['foto_lama'] ?? 'default_avatar.png';
     $hapusFoto = isset($_POST['hapus_foto']);
+
+    if (empty($username)) {
+        $username = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '', explode('@', $email)[0]));
+        if (empty($username)) {
+            $username = 'user_' . time();
+        }
+    }
 
     if (empty($nama) || empty($email)) {
         $msg = "Nama lengkap dan alamat email wajib diisi.";
@@ -99,10 +107,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         if ($id > 0) {
             // EDIT / UPDATE USER
-            $cek = $pdo->prepare("SELECT id FROM users WHERE LOWER(email) = ? AND id != ? LIMIT 1");
-            $cek->execute([$email, $id]);
+            $cek = $pdo->prepare("SELECT id FROM users WHERE (LOWER(email) = ? OR LOWER(username) = ?) AND id != ? LIMIT 1");
+            $cek->execute([$email, $username, $id]);
             if ($cek->fetch()) {
-                $msg = "Email sudah digunakan oleh akun lain. Silakan gunakan email berbeda.";
+                $msg = "Email atau username sudah digunakan oleh akun lain. Silakan gunakan yang berbeda.";
                 $msgType = "danger";
                 $showForm = true;
             } else {
@@ -113,28 +121,28 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                         $showForm = true;
                     } else {
                         $hash = password_hash($password, PASSWORD_DEFAULT);
-                        $upd = $pdo->prepare("UPDATE users SET nama = ?, email = ?, no_telp = ?, role = ?, password = ?, foto = ? WHERE id = ?");
-                        $upd->execute([$nama, $email, $no_telp, $role, $hash, $fotoName, $id]);
+                        $upd = $pdo->prepare("UPDATE users SET nama = ?, username = ?, email = ?, no_telp = ?, role = ?, password = ?, foto = ? WHERE id = ?");
+                        $upd->execute([$nama, $username, $email, $no_telp, $role, $hash, $fotoName, $id]);
                         
                         if ($id === (int)$_SESSION['user_id']) {
                             $_SESSION['user_nama'] = $nama;
                             $_SESSION['user_foto'] = $fotoName;
                         }
 
-                        setFlash('success', 'Data akun <strong>' . htmlspecialchars($nama) . '</strong> berhasil diperbarui!');
+                        setFlash('success', 'Data akun <strong>' . htmlspecialchars($nama) . '</strong> (@' . htmlspecialchars($username) . ') berhasil diperbarui!');
                         header("Location: " . BASE_URL . "admin/users.php");
                         exit;
                     }
                 } else {
-                    $upd = $pdo->prepare("UPDATE users SET nama = ?, email = ?, no_telp = ?, role = ?, foto = ? WHERE id = ?");
-                    $upd->execute([$nama, $email, $no_telp, $role, $fotoName, $id]);
+                    $upd = $pdo->prepare("UPDATE users SET nama = ?, username = ?, email = ?, no_telp = ?, role = ?, foto = ? WHERE id = ?");
+                    $upd->execute([$nama, $username, $email, $no_telp, $role, $fotoName, $id]);
 
                     if ($id === (int)$_SESSION['user_id']) {
                         $_SESSION['user_nama'] = $nama;
                         $_SESSION['user_foto'] = $fotoName;
                     }
 
-                    setFlash('success', 'Perubahan data akun <strong>' . htmlspecialchars($nama) . '</strong> berhasil disimpan!');
+                    setFlash('success', 'Perubahan data akun <strong>' . htmlspecialchars($nama) . '</strong> (@' . htmlspecialchars($username) . ') berhasil disimpan!');
                     header("Location: " . BASE_URL . "admin/users.php");
                     exit;
                 }
@@ -150,17 +158,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 $msgType = "danger";
                 $showForm = true;
             } else {
-                $cek = $pdo->prepare("SELECT id FROM users WHERE LOWER(email) = ? LIMIT 1");
-                $cek->execute([$email]);
+                $cek = $pdo->prepare("SELECT id FROM users WHERE LOWER(email) = ? OR LOWER(username) = ? LIMIT 1");
+                $cek->execute([$email, $username]);
                 if ($cek->fetch()) {
-                    $msg = "Alamat email tersebut sudah terdaftar di sistem. Silakan gunakan email lain.";
+                    $msg = "Email atau username tersebut sudah terdaftar di sistem. Silakan gunakan yang lain.";
                     $msgType = "danger";
                     $showForm = true;
                 } else {
                     $hash = password_hash($password, PASSWORD_DEFAULT);
-                    $ins = $pdo->prepare("INSERT INTO users (nama, email, password, no_telp, role, foto, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
-                    $ins->execute([$nama, $email, $hash, $no_telp, $role, $fotoName]);
-                    setFlash('success', 'Akun pengguna baru <strong>' . htmlspecialchars($nama) . '</strong> dengan peran <strong>' . ucfirst($role) . '</strong> berhasil dibuat!');
+                    $ins = $pdo->prepare("INSERT INTO users (nama, username, email, password, no_telp, role, foto, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+                    $ins->execute([$nama, $username, $email, $hash, $no_telp, $role, $fotoName]);
+                    setFlash('success', 'Akun pengguna baru <strong>' . htmlspecialchars($nama) . '</strong> (@' . htmlspecialchars($username) . ') berhasil dibuat!');
                     header("Location: " . BASE_URL . "admin/users.php");
                     exit;
                 }
@@ -270,76 +278,76 @@ $flash = getFlash();
   <?php endif; ?>
 
   <!-- 4 KPI Stat Widgets -->
-  <div class="grid grid-cols-4 gap-5 mb-6">
+  <div class="grid grid-cols-4 gap-4 mb-4">
     
     <!-- Total Users -->
     <a href="<?= BASE_URL ?>admin/users.php" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-primary" style="cursor: pointer; padding: 1.25rem; border: <?= empty($roleFilter) ? '2px solid #0d9488' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #ccfbf1; color: #0d9488;">
+      <div class="kpi-card-luxury kpi-primary" style="cursor: pointer; border: <?= empty($roleFilter) ? '2px solid #0d9488' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-primary">
             <i class="fa-solid fa-users"></i>
           </div>
-          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.7rem;">Semua Role</span>
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">Semua Role</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Total Pengguna
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalAllUsers ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Akun</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalAllUsers ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Akun</span>
         </h3>
       </div>
     </a>
 
     <!-- Admin -->
     <a href="<?= BASE_URL ?>admin/users.php?role=admin" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; padding: 1.25rem; border: <?= $roleFilter === 'admin' ? '2px solid #dc2626' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #fee2e2; color: #dc2626;">
+      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; border: <?= $roleFilter === 'admin' ? '2px solid #dc2626' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap" style="background: #fee2e2; color: #dc2626;">
             <i class="fa-solid fa-shield-halved"></i>
           </div>
-          <span class="badge-luxury badge-luxury-danger" style="font-size: 0.7rem;">Super Admin</span>
+          <span class="badge-luxury badge-luxury-danger" style="font-size: 0.68rem;">Super Admin</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Administrator
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalAdmin ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Orang</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalAdmin ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Orang</span>
         </h3>
       </div>
     </a>
 
     <!-- Petugas -->
     <a href="<?= BASE_URL ?>admin/users.php?role=petugas" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-indigo" style="cursor: pointer; padding: 1.25rem; border: <?= $roleFilter === 'petugas' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #fef3c7; color: #d97706;">
+      <div class="kpi-card-luxury kpi-indigo" style="cursor: pointer; border: <?= $roleFilter === 'petugas' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap" style="background: #fef3c7; color: #d97706;">
             <i class="fa-solid fa-id-badge"></i>
           </div>
-          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.7rem;">Loket & Gate</span>
+          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.68rem;">Loket & Gate</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Petugas Loket
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalPetugas ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Petugas</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalPetugas ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Petugas</span>
         </h3>
       </div>
     </a>
 
     <!-- Pengunjung -->
     <a href="<?= BASE_URL ?>admin/users.php?role=pengunjung" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-success" style="cursor: pointer; padding: 1.25rem; border: <?= $roleFilter === 'pengunjung' ? '2px solid #16a34a' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap kpi-icon-success" style="width: 44px; height: 44px; font-size: 1.15rem;">
+      <div class="kpi-card-luxury kpi-success" style="cursor: pointer; border: <?= $roleFilter === 'pengunjung' ? '2px solid #16a34a' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-success">
             <i class="fa-solid fa-user"></i>
           </div>
-          <span class="badge-luxury badge-luxury-success" style="font-size: 0.7rem;">Pengunjung</span>
+          <span class="badge-luxury badge-luxury-success" style="font-size: 0.68rem;">Pengunjung</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Wisatawan Terdaftar
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= $totalPengunjung ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Member</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= $totalPengunjung ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Member</span>
         </h3>
       </div>
     </a>
@@ -349,25 +357,25 @@ $flash = getFlash();
   <!-- ==========================================
        COLLAPSIBLE LUXURY FORM WITH PHOTO UPLOADER
        ========================================== -->
-  <div id="userFormCard" class="card p-6 shadow-md bg-white mb-6" style="border-radius: 1.25rem; border: 2px solid <?= $id > 0 ? '#0d9488' : '#cbd5e1' ?>; display: <?= $showForm ? 'block' : 'none' ?>; animation: fadeIn 0.3s ease;">
+  <div id="userFormCard" class="card p-4 shadow-sm bg-white mb-4" style="border-radius: 0.85rem; border: 2px solid <?= $id > 0 ? '#0d9488' : '#cbd5e1' ?>; display: <?= $showForm ? 'block' : 'none' ?>;">
     
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 0.85rem; border-bottom: 1px solid #e2e8f0;">
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <div style="width: 42px; height: 42px; border-radius: 12px; background: <?= $id > 0 ? '#ccfbf1' : '#e0f2fe' ?>; color: <?= $id > 0 ? '#0d9488' : '#0284c7' ?>; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; padding-bottom: 0.65rem; border-bottom: 1px solid #e2e8f0;">
+      <div style="display: flex; align-items: center; gap: 0.65rem;">
+        <div style="width: 36px; height: 36px; border-radius: 8px; background: <?= $id > 0 ? '#ccfbf1' : '#e0f2fe' ?>; color: <?= $id > 0 ? '#0d9488' : '#0284c7' ?>; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
           <i class="fa-solid <?= $id > 0 ? 'fa-user-pen' : 'fa-user-plus' ?>"></i>
         </div>
         <div>
-          <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin: 0;">
+          <h3 style="font-size: 1rem; font-weight: 800; color: #0f172a; margin: 0;">
             <?= $id > 0 ? 'Edit Data & Foto Pengguna' : 'Formulir Pembuatan Akun Baru' ?>
           </h3>
-          <p style="font-size: 0.8rem; color: #64748b; margin: 0;">
-            <?= $id > 0 ? 'Sedang memperbarui profil akun #' . $id . ' (' . htmlspecialchars($userData['nama'] ?? '') . ')' : 'Lengkapi data identitas, unggah foto profil, dan tentukan hak akses' ?>
+          <p style="font-size: 0.75rem; color: #64748b; margin: 0;">
+            <?= $id > 0 ? 'Sedang memperbarui profil akun #' . $id . ' (' . htmlspecialchars($userData['nama'] ?? '') . ')' : 'Lengkapi identitas, username, hak akses dan unggah foto profil' ?>
           </p>
         </div>
       </div>
 
       <div style="display: flex; gap: 0.5rem;">
-        <a href="<?= BASE_URL ?>admin/users.php" class="btn btn-secondary btn-sm" style="border-radius: 0.5rem;">
+        <a href="<?= BASE_URL ?>admin/users.php" class="btn btn-secondary btn-sm" style="border-radius: 0.45rem;">
           <i class="fa-solid fa-xmark"></i> Tutup Form
         </a>
       </div>
@@ -377,87 +385,88 @@ $flash = getFlash();
       <input type="hidden" name="foto_lama" value="<?= htmlspecialchars($userData['foto'] ?? 'default_avatar.png') ?>">
       
       <!-- Photo Uploader Section -->
-      <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; padding: 1.25rem; background: #f8fafc; border-radius: 1rem; border: 1px solid #e2e8f0;">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.85rem; padding: 0.75rem 1rem; background: #f8fafc; border-radius: 0.65rem; border: 1px solid #e2e8f0;">
         <?php 
           $userEditFoto = $userData['foto'] ?? 'default_avatar.png';
           $hasFotoEdit = (!empty($userEditFoto) && $userEditFoto !== 'default_avatar.png' && file_exists(__DIR__ . '/../assets/uploads/users/' . $userEditFoto));
           $editFotoUrl = $hasFotoEdit ? BASE_URL . 'assets/uploads/users/' . htmlspecialchars($userEditFoto) : '';
           $initEdit = strtoupper(substr($userData['nama'] ?? 'U', 0, 1));
         ?>
-        <div style="position: relative; width: 72px; height: 72px; flex-shrink: 0;">
+        <div style="position: relative; width: 52px; height: 52px; flex-shrink: 0;">
           <?php if ($hasFotoEdit): ?>
-            <img src="<?= $editFotoUrl ?>" alt="Foto" id="formAvatarPreview" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2.5px solid #0d9488; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);">
+            <img src="<?= $editFotoUrl ?>" alt="Foto" id="formAvatarPreview" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid #0d9488; box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);">
           <?php else: ?>
-            <div id="formInitialBox" style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #0d9488, #0284c7); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; font-weight: 800; border: 2.5px solid #ffffff; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);">
+            <div id="formInitialBox" style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #0d9488, #0284c7); color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: 800; border: 2px solid #ffffff; box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);">
               <?= $initEdit ?>
             </div>
-            <img src="" alt="Preview" id="formAvatarPreview" style="display: none; width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2.5px solid #0d9488;">
+            <img src="" alt="Preview" id="formAvatarPreview" style="display: none; width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid #0d9488;">
           <?php endif; ?>
         </div>
 
         <div style="flex: 1;">
-          <label style="display: block; font-size: 0.78rem; font-weight: 800; color: #334155; margin-bottom: 0.25rem; text-transform: uppercase;">
+          <label style="display: block; font-size: 0.72rem; font-weight: 800; color: #334155; margin-bottom: 0.2rem; text-transform: uppercase;">
             Foto Profil Pengguna (Opsional)
           </label>
-          <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-            <input type="file" name="foto" id="adminUserFotoInput" accept="image/jpeg,image/png,image/webp,image/jpg" class="form-control" style="font-size: 0.82rem; padding: 0.35rem 0.65rem; max-width: 320px;" onchange="previewAdminUserPhoto(this)">
+          <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+            <input type="file" name="foto" id="adminUserFotoInput" accept="image/jpeg,image/png,image/webp,image/jpg" class="form-control" style="font-size: 0.78rem; padding: 0.25rem 0.5rem; max-width: 280px;" onchange="previewAdminUserPhoto(this)">
             
             <?php if ($hasFotoEdit): ?>
-              <label style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; color: #ef4444; cursor: pointer; user-select: none;">
+              <label style="display: flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; color: #ef4444; cursor: pointer; user-select: none;">
                 <input type="checkbox" name="hapus_foto" value="1" style="accent-color: #ef4444;">
-                <span>Hapus Foto Profil</span>
+                <span>Hapus Foto</span>
               </label>
             <?php endif; ?>
           </div>
-          <small style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; display: block;">Format JPG, PNG, WEBP (Maksimal 5MB).</small>
+          <small style="font-size: 0.68rem; color: #94a3b8; margin-top: 0.15rem; display: block;">Format JPG, PNG, WEBP (Maksimal 5MB).</small>
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-5 mb-4">
+      <div class="grid grid-cols-4 gap-3 mb-3">
         
         <!-- Nama Lengkap -->
         <div class="form-group">
-          <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            Nama Lengkap Pengguna <span style="color: #ef4444;">*</span>
-          </label>
+          <label class="form-label">Nama Lengkap <span style="color: #ef4444;">*</span></label>
           <div style="position: relative;">
-            <i class="fa-solid fa-user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.95rem;"></i>
-            <input type="text" name="nama" class="form-control" style="padding-left: 2.6rem; border-radius: 0.75rem; font-weight: 600;" value="<?= htmlspecialchars($userData['nama'] ?? '') ?>" placeholder="Cth: Budi Santoso" required>
+            <i class="fa-solid fa-user" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.82rem;"></i>
+            <input type="text" name="nama" class="form-control" style="padding-left: 2rem; font-weight: 600;" value="<?= htmlspecialchars($userData['nama'] ?? '') ?>" placeholder="Cth: Budi Santoso" required>
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label">Username <span style="color: #ef4444;">*</span></label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-at" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.82rem;"></i>
+            <input type="text" name="username" class="form-control" style="padding-left: 2rem; font-weight: 600;" value="<?= htmlspecialchars($userData['username'] ?? '') ?>" placeholder="budisantoso" required>
           </div>
         </div>
 
         <!-- Email -->
         <div class="form-group">
-          <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            Alamat Email (Login) <span style="color: #ef4444;">*</span>
-          </label>
+          <label class="form-label">Email Login <span style="color: #ef4444;">*</span></label>
           <div style="position: relative;">
-            <i class="fa-solid fa-envelope" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.95rem;"></i>
-            <input type="email" name="email" class="form-control" style="padding-left: 2.6rem; border-radius: 0.75rem; font-weight: 600;" value="<?= htmlspecialchars($userData['email'] ?? '') ?>" placeholder="nama@email.com" required>
+            <i class="fa-solid fa-envelope" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.82rem;"></i>
+            <input type="email" name="email" class="form-control" style="padding-left: 2rem; font-weight: 600;" value="<?= htmlspecialchars($userData['email'] ?? '') ?>" placeholder="nama@email.com" required>
           </div>
         </div>
 
         <!-- No WhatsApp -->
         <div class="form-group">
-          <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            Nomor WhatsApp / HP
-          </label>
+          <label class="form-label">WhatsApp / HP</label>
           <div style="position: relative;">
-            <i class="fa-brands fa-whatsapp" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #16a34a; font-size: 1.05rem;"></i>
-            <input type="text" name="no_telp" class="form-control" style="padding-left: 2.6rem; border-radius: 0.75rem; font-weight: 600;" value="<?= htmlspecialchars($userData['no_telp'] ?? '') ?>" placeholder="081234567890">
+            <i class="fa-brands fa-whatsapp" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #16a34a; font-size: 0.9rem;"></i>
+            <input type="text" name="no_telp" class="form-control" style="padding-left: 2rem; font-weight: 600;" value="<?= htmlspecialchars($userData['no_telp'] ?? '') ?>" placeholder="081234567890">
           </div>
         </div>
 
       </div>
 
-      <div class="grid grid-cols-2 gap-5 mb-5">
+      <div class="grid grid-cols-2 gap-3 mb-3">
         
         <!-- Role Selector -->
         <div class="form-group">
-          <label style="display: block; font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">
-            Hak Akses Sistem (Role) <span style="color: #ef4444;">*</span>
-          </label>
-          <select name="role" class="form-control" style="border-radius: 0.75rem; font-weight: 700; height: 45px;" required>
+          <label class="form-label">Hak Akses Sistem (Role) <span style="color: #ef4444;">*</span></label>
+          <select name="role" class="form-control" style="font-weight: 700;" required>
             <option value="pengunjung" <?= ($userData['role'] ?? '') === 'pengunjung' ? 'selected' : '' ?>>
               👤 Pengunjung / Wisatawan (Pemesanan Tiket & Riwayat)
             </option>
@@ -472,18 +481,18 @@ $flash = getFlash();
 
         <!-- Password -->
         <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-            <label style="font-size: 0.75rem; font-weight: 800; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; margin: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <label class="form-label" style="margin: 0;">
               <?= $id > 0 ? 'Ganti Kata Sandi (Opsional)' : 'Kata Sandi Akun *' ?>
             </label>
-            <a href="javascript:void(0)" onclick="generateRandomPwd()" style="font-size: 0.75rem; color: #0d9488; font-weight: 700; text-decoration: none;">
-              <i class="fa-solid fa-key"></i> Generate Otomatis
+            <a href="javascript:void(0)" onclick="generateRandomPwd()" style="font-size: 0.7rem; color: #0d9488; font-weight: 700; text-decoration: none;">
+              <i class="fa-solid fa-key"></i> Generate
             </a>
           </div>
           <div style="position: relative;">
-            <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.95rem;"></i>
-            <input type="password" name="password" id="userFormPassword" class="form-control" style="padding-left: 2.6rem; padding-right: 2.6rem; border-radius: 0.75rem; font-weight: 600;" placeholder="<?= $id > 0 ? '•••••••• (Biarkan kosong jika tidak ganti)' : 'Min. 6 Karakter' ?>" <?= $id > 0 ? '' : 'required' ?>>
-            <button type="button" onclick="toggleUserPwd()" style="position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer;" title="Tampilkan/Sembunyikan Sandi">
+            <i class="fa-solid fa-lock" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.82rem;"></i>
+            <input type="password" name="password" id="userFormPassword" class="form-control" style="padding-left: 2rem; padding-right: 2rem; font-weight: 600;" placeholder="<?= $id > 0 ? '•••••••• (Kosongkan jika tidak diganti)' : 'Min. 6 Karakter' ?>" <?= $id > 0 ? '' : 'required' ?>>
+            <button type="button" onclick="toggleUserPwd()" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer;" title="Tampilkan/Sembunyikan Sandi">
               <i class="fa-regular fa-eye" id="userEyeIcon"></i>
             </button>
           </div>
@@ -492,11 +501,11 @@ $flash = getFlash();
       </div>
 
       <!-- Submit & Cancel Buttons -->
-      <div style="display: flex; align-items: center; gap: 0.75rem; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 1.25rem;">
-        <a href="<?= BASE_URL ?>admin/users.php" class="btn btn-secondary" style="border-radius: 0.75rem; font-weight: 700; padding: 0.65rem 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; border-top: 1px solid #f1f5f9; padding-top: 0.75rem;">
+        <a href="<?= BASE_URL ?>admin/users.php" class="btn btn-secondary btn-sm" style="font-weight: 700;">
           <i class="fa-solid fa-xmark"></i> Batal
         </a>
-        <button type="submit" class="btn btn-primary shadow-glow" style="border-radius: 0.75rem; font-weight: 800; padding: 0.65rem 1.75rem;">
+        <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 800;">
           <i class="fa-solid <?= $id > 0 ? 'fa-floppy-disk' : 'fa-user-check' ?>"></i>
           <span><?= $id > 0 ? 'Simpan Perubahan Akun' : 'Simpan & Buat Akun' ?></span>
         </button>
@@ -508,110 +517,93 @@ $flash = getFlash();
   <!-- ==========================================
        TABEL DAFTAR PENGGUNA (FULL 100% WIDTH)
        ========================================== -->
-  <div class="card-table-luxury" style="width: 100%; border-radius: 1.25rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);">
+  <div class="card-table-luxury">
     
-    <!-- Filter, Search and Tab Header -->
-    <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; background: #ffffff;">
-      
-      <!-- Role Filter Tabs -->
-      <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
-        <a href="<?= BASE_URL ?>admin/users.php<?= !empty($search) ? '?q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= empty($roleFilter) ? 'btn-primary' : 'btn-secondary' ?>" style="border-radius: 9999px; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.95rem;">
-          Semua Pengguna (<?= $totalAllUsers ?>)
-        </a>
-        <a href="<?= BASE_URL ?>admin/users.php?role=admin<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $roleFilter === 'admin' ? 'btn-primary' : 'btn-secondary' ?>" style="border-radius: 9999px; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.95rem;">
-          🛡️ Admin (<?= $totalAdmin ?>)
-        </a>
-        <a href="<?= BASE_URL ?>admin/users.php?role=petugas<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $roleFilter === 'petugas' ? 'btn-primary' : 'btn-secondary' ?>" style="border-radius: 9999px; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.95rem;">
-          🎫 Petugas Loket (<?= $totalPetugas ?>)
-        </a>
-        <a href="<?= BASE_URL ?>admin/users.php?role=pengunjung<?= !empty($search) ? '&q=' . urlencode($search) : '' ?>" class="btn btn-sm <?= $roleFilter === 'pengunjung' ? 'btn-primary' : 'btn-secondary' ?>" style="border-radius: 9999px; font-size: 0.8rem; font-weight: 700; padding: 0.4rem 0.95rem;">
-          🎒 Wisatawan (<?= $totalPengunjung ?>)
-        </a>
+    <div class="card-table-header">
+      <div>
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+          Daftar Pengguna Sistem 
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">
+            <?= count($usersList) ?> Akun
+          </span>
+        </h3>
       </div>
 
-      <!-- Search Box Form -->
-      <form action="<?= BASE_URL ?>admin/users.php" method="GET" style="display: flex; align-items: center; gap: 0.5rem; min-width: 280px;">
-        <?php if (!empty($roleFilter)): ?>
-          <input type="hidden" name="role" value="<?= htmlspecialchars($roleFilter) ?>">
-        <?php endif; ?>
-        <div style="position: relative; flex: 1;">
-          <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: #0d9488; font-size: 0.85rem;"></i>
-          <input type="text" name="q" class="form-control" style="padding: 0.5rem 0.85rem 0.5rem 2.4rem; font-size: 0.85rem; border-radius: 0.65rem;" placeholder="Cari nama, email, no HP..." value="<?= htmlspecialchars($search) ?>">
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.5rem 0.95rem; font-weight: 700; border-radius: 0.65rem;">
-          Cari
-        </button>
-        <?php if (!empty($search)): ?>
-          <a href="<?= BASE_URL ?>admin/users.php<?= !empty($roleFilter) ? '?role=' . urlencode($roleFilter) : '' ?>" class="btn btn-secondary btn-sm" style="border-radius: 0.65rem; padding: 0.5rem 0.75rem;" title="Reset Pencarian">
-            <i class="fa-solid fa-xmark"></i>
-          </a>
-        <?php endif; ?>
-      </form>
-
+      <!-- Quick Role Pills -->
+      <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+        <a href="<?= BASE_URL ?>admin/users.php" class="btn btn-sm <?= empty($roleFilter) ? 'btn-primary' : 'btn-secondary' ?>">
+          Semua (<?= $totalAllUsers ?>)
+        </a>
+        <a href="<?= BASE_URL ?>admin/users.php?role=admin" class="btn btn-sm <?= $roleFilter === 'admin' ? 'btn-primary' : 'btn-secondary' ?>">
+          Admin (<?= $totalAdmin ?>)
+        </a>
+        <a href="<?= BASE_URL ?>admin/users.php?role=petugas" class="btn btn-sm <?= $roleFilter === 'petugas' ? 'btn-primary' : 'btn-secondary' ?>">
+          Petugas (<?= $totalPetugas ?>)
+        </a>
+        <a href="<?= BASE_URL ?>admin/users.php?role=pengunjung" class="btn btn-sm <?= $roleFilter === 'pengunjung' ? 'btn-primary' : 'btn-secondary' ?>">
+          Pengunjung (<?= $totalPengunjung ?>)
+        </a>
+      </div>
     </div>
-
-    <!-- User List Table (Full Width 100% Fit) -->
-    <div style="overflow-x: auto; width: 100%;">
-      <table class="table-luxury" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+    
+    <div class="overflow-x-auto">
+      <table class="table-luxury" id="usersDataTable">
         <thead>
           <tr>
-            <th style="width: 35%;">Foto Profil & Identitas</th>
-            <th style="width: 20%;">Kontak WhatsApp</th>
+            <th style="width: 32%;">Profil Pengguna & Username</th>
+            <th style="width: 18%;">WhatsApp / HP</th>
             <th style="width: 18%;">Hak Akses (Role)</th>
-            <th style="width: 15%;">Terdaftar</th>
-            <th style="width: 12%; text-align: right;">Aksi Cepat</th>
+            <th style="width: 18%;">Tgl Terdaftar</th>
+            <th style="width: 14%; text-align: right;">Aksi</th>
           </tr>
         </thead>
         <tbody>
           <?php if (empty($usersList)): ?>
             <tr>
-              <td colspan="5" style="text-align: center; padding: 4rem 1rem; color: #94a3b8;">
-                <i class="fa-solid fa-user-slash" style="font-size: 2.8rem; margin-bottom: 0.75rem; display: block; color: #cbd5e1;"></i>
-                <p style="font-size: 1rem; font-weight: 700; color: #475569; margin: 0;">Tidak ada data pengguna yang sesuai dengan filter.</p>
-                <p style="font-size: 0.82rem; color: #94a3b8; margin-top: 0.25rem;">Coba bersihkan kata kunci pencarian atau ubah tab kategori role di atas.</p>
+              <td colspan="5" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                <i class="fa-solid fa-user-slash" style="font-size: 2rem; margin-bottom: 0.5rem; display: block; color: #cbd5e1;"></i>
+                Tidak ada pengguna yang sesuai dengan filter atau kata kunci.
               </td>
             </tr>
           <?php else: ?>
             <?php foreach ($usersList as $u): 
-              $userInit = strtoupper(substr($u['nama'], 0, 1));
               $isSelf = ((int)$u['id'] === (int)$_SESSION['user_id']);
-              $isBeingEdited = ($id === (int)$u['id']);
+              $isBeingEdited = ($id > 0 && (int)$u['id'] === $id);
+              $userInit = strtoupper(substr($u['nama'], 0, 1));
               $userFotoFile = $u['foto'] ?? 'default_avatar.png';
               $hasUserFoto = (!empty($userFotoFile) && $userFotoFile !== 'default_avatar.png' && file_exists(__DIR__ . '/../assets/uploads/users/' . $userFotoFile));
             ?>
               <tr style="<?= $isBeingEdited ? 'background-color: #f0fdfa;' : '' ?>">
                 
-                <!-- 1. User Profile Info with Photo -->
+                <!-- 1. User Profile Info with Photo & Username -->
                 <td>
-                  <div style="display: flex; align-items: center; gap: 0.85rem;">
+                  <div style="display: flex; align-items: center; gap: 0.65rem;">
                     
                     <?php if ($hasUserFoto): ?>
-                      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($userFotoFile) ?>" alt="<?= htmlspecialchars($u['nama']) ?>" style="width: 46px; height: 46px; min-width: 46px; border-radius: 14px; object-fit: cover; border: 2px solid <?= $u['role'] === 'admin' ? '#dc2626' : ($u['role'] === 'petugas' ? '#d97706' : '#0d9488') ?>; box-shadow: 0 4px 10px rgba(0,0,0,0.12);">
+                      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($userFotoFile) ?>" alt="<?= htmlspecialchars($u['nama']) ?>" style="width: 38px; height: 38px; min-width: 38px; border-radius: 10px; object-fit: cover; border: 1.5px solid <?= $u['role'] === 'admin' ? '#dc2626' : ($u['role'] === 'petugas' ? '#d97706' : '#0d9488') ?>; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
                     <?php else: ?>
-                      <div style="width: 46px; height: 46px; min-width: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; color: #ffffff; background: <?= $u['role'] === 'admin' ? 'linear-gradient(135deg, #dc2626, #991b1b)' : ($u['role'] === 'petugas' ? 'linear-gradient(135deg, #d97706, #b45309)' : 'linear-gradient(135deg, #0d9488, #0284c7)') ?>; box-shadow: 0 4px 10px rgba(0,0,0,0.12);">
+                      <div style="width: 38px; height: 38px; min-width: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; color: #ffffff; background: <?= $u['role'] === 'admin' ? 'linear-gradient(135deg, #dc2626, #991b1b)' : ($u['role'] === 'petugas' ? 'linear-gradient(135deg, #d97706, #b45309)' : 'linear-gradient(135deg, #0d9488, #0284c7)') ?>; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
                         <?= $userInit ?>
                       </div>
                     <?php endif; ?>
 
                     <div>
-                      <div style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;">
-                        <strong style="color: #0f172a; font-size: 0.95rem; font-weight: 800;">
+                      <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                        <strong style="color: #0f172a; font-size: 0.85rem; font-weight: 800;">
                           <?= htmlspecialchars($u['nama']) ?>
                         </strong>
+                        <span style="font-family: monospace; font-size: 0.72rem; color: #0284c7; background: #e0f2fe; padding: 0.05rem 0.35rem; border-radius: 4px; font-weight: 700;">
+                          @<?= htmlspecialchars($u['username'] ?? strtolower(explode('@', $u['email'])[0])) ?>
+                        </span>
                         <?php if ($isSelf): ?>
-                          <span style="font-size: 0.68rem; font-weight: 800; background: #e0f2fe; color: #0369a1; padding: 0.15rem 0.5rem; border-radius: 0.35rem; border: 1px solid #bae6fd;">
-                            <i class="fa-solid fa-crown text-amber"></i> Anda (Aktif)
-                          </span>
-                        <?php endif; ?>
-                        <?php if ($isBeingEdited): ?>
-                          <span style="font-size: 0.68rem; font-weight: 800; background: #ccfbf1; color: #0f766e; padding: 0.15rem 0.5rem; border-radius: 0.35rem; border: 1px solid #99f6e4;">
-                            <i class="fa-solid fa-pen"></i> Sedang Diedit
+                          <span style="font-size: 0.65rem; font-weight: 800; background: #fef3c7; color: #b45309; padding: 0.1rem 0.4rem; border-radius: 0.3rem;">
+                            Anda
                           </span>
                         <?php endif; ?>
                       </div>
-                      <a href="mailto:<?= htmlspecialchars($u['email']) ?>" style="font-size: 0.82rem; color: #64748b; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.15rem;">
-                        <i class="fa-regular fa-envelope" style="font-size: 0.75rem; color: #0d9488;"></i> <?= htmlspecialchars($u['email']) ?>
-                      </a>
+                      <span style="font-size: 0.75rem; color: #64748b; display: block;">
+                        <?= htmlspecialchars($u['email']) ?>
+                      </span>
                     </div>
                   </div>
                 </td>
@@ -624,57 +616,54 @@ $flash = getFlash();
                         $waClean = '62' . substr($waClean, 1);
                     }
                   ?>
-                    <a href="https://wa.me/<?= $waClean ?>" target="_blank" style="font-size: 0.84rem; font-weight: 700; color: #15803d; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; background: #f0fdf4; padding: 0.35rem 0.7rem; border-radius: 0.5rem; border: 1px solid #bbf7d0;" title="Kirim Chat WhatsApp">
-                      <i class="fa-brands fa-whatsapp text-emerald" style="font-size: 1rem;"></i> <?= htmlspecialchars($u['no_telp']) ?>
+                    <a href="https://wa.me/<?= $waClean ?>" target="_blank" style="font-size: 0.78rem; font-weight: 700; color: #15803d; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; background: #f0fdf4; padding: 0.2rem 0.5rem; border-radius: 0.4rem; border: 1px solid #bbf7d0;" title="Kirim Chat WhatsApp">
+                      <i class="fa-brands fa-whatsapp text-emerald"></i> <?= htmlspecialchars($u['no_telp']) ?>
                     </a>
                   <?php else: ?>
-                    <span style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Belum diisi</span>
+                    <span style="font-size: 0.75rem; color: #94a3b8; font-style: italic;">-</span>
                   <?php endif; ?>
                 </td>
 
                 <!-- 3. Role Badge -->
                 <td>
                   <?php if ($u['role'] === 'admin'): ?>
-                    <span class="badge-luxury badge-luxury-danger" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
-                      <i class="fa-solid fa-shield-halved" style="font-size: 0.75rem;"></i> Administrator
+                    <span class="badge-luxury badge-luxury-danger">
+                      <i class="fa-solid fa-shield-halved"></i> Administrator
                     </span>
                   <?php elseif ($u['role'] === 'petugas'): ?>
-                    <span class="badge-luxury badge-luxury-warning" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
-                      <i class="fa-solid fa-id-badge" style="font-size: 0.75rem;"></i> Petugas Loket
+                    <span class="badge-luxury badge-luxury-warning">
+                      <i class="fa-solid fa-id-badge"></i> Petugas Loket
                     </span>
                   <?php else: ?>
-                    <span class="badge-luxury badge-luxury-primary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
-                      <i class="fa-solid fa-user" style="font-size: 0.75rem;"></i> Wisatawan
+                    <span class="badge-luxury badge-luxury-primary">
+                      <i class="fa-solid fa-user"></i> Wisatawan
                     </span>
                   <?php endif; ?>
                 </td>
 
                 <!-- 4. Joined Date -->
                 <td>
-                  <span style="font-size: 0.85rem; color: #334155; display: block; font-weight: 600;">
+                  <span style="font-size: 0.78rem; color: #334155; display: block; font-weight: 600;">
                     <?= formatTanggalIndo($u['created_at']) ?>
                   </span>
-                  <small style="font-size: 0.72rem; color: #94a3b8;">
-                    <?= date('H:i', strtotime($u['created_at'])) ?> WIB
-                  </small>
                 </td>
 
                 <!-- 5. Actions (Edit & Delete) -->
                 <td style="text-align: right;">
-                  <div style="display: inline-flex; align-items: center; gap: 0.4rem; justify-content: flex-end;">
+                  <div style="display: inline-flex; align-items: center; gap: 0.3rem; justify-content: flex-end;">
                     
                     <!-- Edit Button -->
-                    <a href="<?= BASE_URL ?>admin/users.php?id=<?= $u['id'] ?>&show_form=1" class="btn btn-secondary btn-sm" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; border-radius: 0.5rem; font-weight: 700;" title="Edit Data Pengguna">
-                      <i class="fa-solid fa-pen-to-square"></i> Edit
+                    <a href="<?= BASE_URL ?>admin/users.php?id=<?= $u['id'] ?>&show_form=1" class="btn btn-secondary btn-sm" title="Edit Data Pengguna">
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </a>
 
                     <!-- Delete Button -->
                     <?php if (!$isSelf): ?>
-                      <a href="<?= BASE_URL ?>admin/users.php?action=delete&id=<?= $u['id'] ?>" class="btn btn-danger btn-sm" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; border-radius: 0.5rem;" title="Hapus Akun" onclick="return confirm('Apakah Anda yakin ingin menghapus akun pengguna [<?= htmlspecialchars(addslashes($u['nama'])) ?>]? Tindakan ini tidak dapat dibatalkan.')">
+                      <a href="<?= BASE_URL ?>admin/users.php?action=delete&id=<?= $u['id'] ?>" class="btn btn-danger btn-sm" title="Hapus Akun" onclick="return confirm('Apakah Anda yakin ingin menghapus akun pengguna [<?= htmlspecialchars(addslashes($u['nama'])) ?>]?')">
                         <i class="fa-solid fa-trash"></i>
                       </a>
                     <?php else: ?>
-                      <button type="button" class="btn btn-secondary btn-sm" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; opacity: 0.4; cursor: not-allowed; border-radius: 0.5rem;" title="Akun Anda aktif saat ini (tidak bisa dihapus)">
+                      <button type="button" class="btn btn-secondary btn-sm" style="opacity: 0.4; cursor: not-allowed;" title="Akun Anda aktif saat ini">
                         <i class="fa-solid fa-lock"></i>
                       </button>
                     <?php endif; ?>

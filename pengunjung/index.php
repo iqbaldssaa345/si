@@ -66,7 +66,7 @@ $flash = getFlash();
       <div>
         <div style="display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.1rem;">
           <span class="badge-member badge-member-gold">
-            <i class="fa-solid fa-crown text-amber-500"></i> VIP Member
+            <span style="font-size: 0.8rem;">⭐</span> VIP Member
           </span>
           <span style="font-size: 0.72rem; color: #64748b;">
             <i class="fa-regular fa-calendar" style="margin-right: 2px;"></i> <?= formatTanggalIndo($today) ?>
@@ -255,11 +255,26 @@ $flash = getFlash();
                 ?>
                   <tr>
                     <td>
-                      <div style="font-weight: 800; color: #0f172a; font-size: 0.82rem; line-height: 1.2;">
-                        <?= htmlspecialchars($p['nama_destinasi']) ?>
-                      </div>
-                      <div style="font-family: monospace; font-size: 0.7rem; color: #0284c7; font-weight: 700;">
-                        <?= htmlspecialchars($p['kode_booking']) ?>
+                      <?php 
+                        $pFoto = trim($p['foto_utama'] ?? '');
+                        if (!empty($pFoto) && (strpos($pFoto, 'http://') === 0 || strpos($pFoto, 'https://') === 0)) {
+                            $pFotoUrl = $pFoto;
+                        } elseif (!empty($pFoto) && file_exists(__DIR__ . '/../assets/uploads/destinasi/' . $pFoto)) {
+                            $pFotoUrl = BASE_URL . 'assets/uploads/destinasi/' . $pFoto;
+                        } else {
+                            $pFotoUrl = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&q=80';
+                        }
+                      ?>
+                      <div style="display: flex; align-items: center; gap: 0.55rem;">
+                        <img src="<?= htmlspecialchars($pFotoUrl) ?>" alt="Thumb" style="width: 34px; height: 34px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #0f172a;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&q=80';">
+                        <div style="min-width: 0;">
+                          <div style="font-weight: 800; color: #0f172a; font-size: 0.82rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <?= htmlspecialchars($p['nama_destinasi']) ?>
+                          </div>
+                          <div style="font-family: monospace; font-size: 0.7rem; color: #0284c7; font-weight: 700;">
+                            <?= htmlspecialchars($p['kode_booking']) ?>
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td>
@@ -324,15 +339,25 @@ $flash = getFlash();
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <?php foreach ($destinasiPopuler as $dp): ?>
+          <?php foreach ($destinasiPopuler as $dp): 
+            $dpFoto = trim($dp['foto_utama'] ?? '');
+            if (!empty($dpFoto) && (strpos($dpFoto, 'http://') === 0 || strpos($dpFoto, 'https://') === 0)) {
+                $dpFotoUrl = $dpFoto;
+            } elseif (!empty($dpFoto) && file_exists(__DIR__ . '/../assets/uploads/destinasi/' . $dpFoto)) {
+                $dpFotoUrl = BASE_URL . 'assets/uploads/destinasi/' . $dpFoto;
+            } else {
+                $dpFotoUrl = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80';
+            }
+          ?>
             <div style="display: flex; gap: 0.65rem; align-items: center; padding: 0.5rem; border-radius: 0.55rem; border: 1px solid #f1f5f9; background: #fafafa; transition: background 0.15s ease;">
               
               <!-- Thumbnail -->
-              <div style="width: 58px; height: 58px; min-width: 58px; border-radius: 0.45rem; overflow: hidden; position: relative;">
-                <img src="<?= BASE_URL ?>assets/uploads/destinasi/<?= htmlspecialchars($dp['foto_utama']) ?>" 
+              <div style="width: 58px; height: 58px; min-width: 58px; border-radius: 0.45rem; overflow: hidden; position: relative; background: #0f172a;">
+                <img src="<?= htmlspecialchars($dpFotoUrl) ?>" 
                      alt="<?= htmlspecialchars($dp['nama_destinasi']) ?>" 
                      style="width: 100%; height: 100%; object-fit: cover;"
-                     onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'">
+                     loading="lazy"
+                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'">
               </div>
 
               <!-- Detail Info -->

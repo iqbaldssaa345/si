@@ -23,16 +23,17 @@ if (isset($pdo) && $pdo && $userId > 0) {
 <aside class="admin-sidebar" style="background: linear-gradient(180deg, #0b1329 0%, #0f172a 100%);">
   
   <!-- Brand Header -->
-  <div class="admin-sidebar-brand" style="padding: 1.25rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
-    <div class="admin-brand-icon" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4); width: 42px; height: 42px; border-radius: 0.75rem;">
-      <i class="fa-solid fa-compass text-white" style="font-size: 1.25rem;"></i>
+  <div class="admin-sidebar-brand" style="padding: 0.6rem 0.8rem; display: flex; align-items: center; gap: 0.55rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
+    <div class="admin-brand-icon-luxury admin-icon-pengunjung">
+      <span class="luxury-emote-brand">🌴</span>
     </div>
-    <div style="overflow: hidden; flex: 1;">
-      <span style="display: block; font-weight: 800; font-size: 0.95rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: 'Outfit', sans-serif;">
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <span style="display: block; font-weight: 800; font-size: 0.88rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: 'Outfit', sans-serif; line-height: 1.2;">
         <?= htmlspecialchars($settings['nama_sistem'] ?? 'Pesona Nusantara') ?>
       </span>
-      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #38bdf8; font-weight: 700;">
-        <i class="fa-solid fa-crown text-amber-400" style="font-size: 0.68rem;"></i> Member Wisatawan
+      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: #38bdf8; font-weight: 700; line-height: 1.2;">
+        <span style="width: 5px; height: 5px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 6px #22c55e;"></span>
+        Wisatawan VIP Portal
       </span>
     </div>
   </div>
@@ -40,21 +41,31 @@ if (isset($pdo) && $pdo && $userId > 0) {
   <!-- Profile Card -->
   <?php 
     $sessFoto = $_SESSION['user_foto'] ?? 'default_avatar.png';
-    $hasSessFoto = (!empty($sessFoto) && $sessFoto !== 'default_avatar.png' && file_exists(__DIR__ . '/../../assets/uploads/users/' . $sessFoto));
+    $sessFotoUrl = '';
+    if (!empty($sessFoto) && $sessFoto !== 'default_avatar.png') {
+        if (strpos($sessFoto, 'http://') === 0 || strpos($sessFoto, 'https://') === 0) {
+            $sessFotoUrl = $sessFoto;
+        } elseif (file_exists(__DIR__ . '/../../assets/uploads/users/' . $sessFoto)) {
+            $sessFotoUrl = BASE_URL . 'assets/uploads/users/' . $sessFoto;
+        }
+    }
   ?>
-  <div class="admin-profile-pill" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); margin: 1rem 1rem 0.5rem 1rem; border-radius: 0.85rem; padding: 0.75rem;">
-    <?php if ($hasSessFoto): ?>
-      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($sessFoto) ?>" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+  <div class="admin-profile-pill" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); margin: 0.3rem 0.65rem 0.2rem 0.65rem; border-radius: 0.65rem; padding: 0.35rem 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+    <?php if (!empty($sessFotoUrl)): ?>
+      <img src="<?= htmlspecialchars($sessFotoUrl) ?>" alt="Avatar" style="width: 28px; height: 28px; min-width: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="admin-avatar" style="display: none; background: linear-gradient(135deg, #0284c7, #6366f1); width: 28px; height: 28px; min-width: 28px; font-weight: 800; font-size: 0.8rem; border-radius: 50%; align-items: center; justify-content: center; color: white;">
+        <?= $initial ?>
+      </div>
     <?php else: ?>
-      <div class="admin-avatar" style="background: linear-gradient(135deg, #0284c7, #6366f1); width: 38px; height: 38px; font-weight: 800; font-size: 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+      <div class="admin-avatar" style="background: linear-gradient(135deg, #0284c7, #6366f1); width: 28px; height: 28px; min-width: 28px; font-weight: 800; font-size: 0.8rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
         <?= $initial ?>
       </div>
     <?php endif; ?>
-    <div style="overflow: hidden; flex: 1;">
-      <strong style="display: block; font-size: 0.875rem; color: #f8fafc; font-weight: 800; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <strong style="display: block; font-size: 0.8rem; color: #f8fafc; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userName) ?>
       </strong>
-      <span style="font-size: 0.72rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+      <span style="font-size: 0.68rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userEmail) ?>
       </span>
     </div>
@@ -129,12 +140,10 @@ if (isset($pdo) && $pdo && $userId > 0) {
   </ul>
 
   <!-- Sidebar Footer -->
-  <div class="admin-sidebar-footer" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 0.5rem;">
-    <a href="<?= BASE_URL ?>destinasi.php" target="_blank" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); justify-content: center; width: 100%; border-radius: 0.65rem; font-weight: 700;">
-      <i class="fa-solid fa-compass"></i> Jelajahi Destinasi
-    </a>
-    <a href="<?= BASE_URL ?>logout.php" class="btn btn-danger btn-sm" style="justify-content: center; width: 100%; border-radius: 0.65rem; font-weight: 700;" onclick="return confirm('Apakah Anda yakin ingin keluar?')">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar Akun
+  <div class="admin-sidebar-footer">
+    <a href="<?= BASE_URL ?>logout.php" class="admin-footer-logout-single" onclick="return confirm('Apakah Anda yakin ingin keluar dari portal pengunjung?')" title="Keluar Akun">
+      <span class="admin-footer-logout-icon">🚪</span>
+      <span>Keluar Akun</span>
     </a>
   </div>
 

@@ -3,18 +3,31 @@ require_once __DIR__ . '/config/database.php';
 checkAuth();
 
 $id = (int)($_GET['id'] ?? 0);
-if ($id <= 0) {
+$kode = trim($_GET['kode'] ?? '');
+
+if ($id <= 0 && empty($kode)) {
     header("Location: " . BASE_URL . "riwayat.php");
     exit;
 }
 
 // Ambil data pemesanan
-$stmt = $pdo->prepare("SELECT p.*, d.nama_destinasi, d.lokasi, d.foto_utama 
-                       FROM pemesanan p 
-                       JOIN destinasi d ON p.destinasi_id = d.id 
-                       WHERE p.id = ? AND p.user_id = ? LIMIT 1");
-$stmt->execute([$id, $_SESSION['user_id']]);
+if ($id > 0) {
+    $stmt = $pdo->prepare("SELECT p.*, d.nama_destinasi, d.lokasi, d.foto_utama 
+                           FROM pemesanan p 
+                           JOIN destinasi d ON p.destinasi_id = d.id 
+                           WHERE p.id = ? AND p.user_id = ? LIMIT 1");
+    $stmt->execute([$id, $_SESSION['user_id']]);
+} else {
+    $stmt = $pdo->prepare("SELECT p.*, d.nama_destinasi, d.lokasi, d.foto_utama 
+                           FROM pemesanan p 
+                           JOIN destinasi d ON p.destinasi_id = d.id 
+                           WHERE p.kode_booking = ? AND p.user_id = ? LIMIT 1");
+    $stmt->execute([$kode, $_SESSION['user_id']]);
+}
 $pesanan = $stmt->fetch();
+if ($pesanan) {
+    $id = (int)$pesanan['id'];
+}
 
 if (!$pesanan) {
     header("Location: " . BASE_URL . "riwayat.php");

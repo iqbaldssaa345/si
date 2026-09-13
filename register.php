@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . '/config/database.php';
 
+// Pastikan kolom username tersedia di database
+try {
+    $pdo->exec("ALTER TABLE `users` ADD COLUMN `username` VARCHAR(100) NULL AFTER `nama`");
+    $pdo->exec("UPDATE `users` SET `username` = SUBSTRING_INDEX(email, '@', 1) WHERE `username` IS NULL OR `username` = ''");
+} catch (Exception $e) {}
+
 if (isset($_SESSION['user_id'])) {
     header("Location: " . BASE_URL . "index.php");
     exit;
@@ -10,54 +16,72 @@ $error = '';
 $success = '';
 
 $namaInput = '';
+$usernameInput = '';
 $emailInput = '';
 $telpInput = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = trim($_POST['nama'] ?? '');
+    $username = strtolower(trim($_POST['username'] ?? ''));
     $email = strtolower(trim($_POST['email'] ?? ''));
     $no_telp = trim($_POST['no_telp'] ?? '');
     $password = trim($_POST['password'] ?? '');
     $konfirmasi = trim($_POST['konfirmasi_password'] ?? '');
 
     $namaInput = $nama;
+    $usernameInput = $username;
     $emailInput = $email;
     $telpInput = $no_telp;
 
+    // Bersihkan username dari karakter tidak valid jika diisi
+    if (!empty($username)) {
+        $username = preg_replace('/[^a-z0-9_.]/', '', $username);
+    } else {
+        $username = explode('@', $email)[0];
+    }
+
     if (empty($nama) || empty($email) || empty($password)) {
-        $error = "Mohon lengkapi seluruh kolom yang wajib diisi (*).";
+        $error = "Mohon lengkapi seluruh kolom yang bertanda bintang (*).";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Format alamat email tidak valid.";
+        $error = "Format alamat email tidak valid. Pastikan format penulisan benar.";
     } elseif (strlen($password) < 6) {
-        $error = "Kata sandi minimal harus 6 karakter demi keamanan akun.";
+        $error = "Kata sandi minimal harus 6 karakter demi keamanan akun Anda.";
     } elseif ($password !== $konfirmasi) {
-        $error = "Konfirmasi kata sandi tidak cocok dengan kata sandi yang dibuat.";
+        $error = "Konfirmasi kata sandi tidak cocok dengan kata sandi baru.";
     } else {
         // Cek apakah email sudah terdaftar
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE LOWER(email) = ? LIMIT 1");
-        $stmt->execute([$email]);
-        if ($stmt->fetch()) {
-            $error = "Alamat email <strong>" . htmlspecialchars($email) . "</strong> sudah terdaftar. Silakan <a href='" . BASE_URL . "login.php' style='color:#0d9488; font-weight:800; text-decoration:underline;'>Masuk di sini</a>.";
+        $stmtEmail = $pdo->prepare("SELECT id FROM users WHERE LOWER(email) = ? LIMIT 1");
+        $stmtEmail->execute([$email]);
+
+        // Cek apakah username sudah dipakai
+        $stmtUser = $pdo->prepare("SELECT id FROM users WHERE LOWER(username) = ? LIMIT 1");
+        $stmtUser->execute([$username]);
+
+        if ($stmtEmail->fetch()) {
+            $error = "Alamat email <strong>" . htmlspecialchars($email) . "</strong> sudah terdaftar. Silakan <a href='" . BASE_URL . "login.php' style='color:#0d9488; font-weight:800; text-decoration:underline;'>Masuk di sini</a> atau gunakan email lain.";
+        } elseif ($stmtUser->fetch()) {
+            $error = "Username <strong>@" . htmlspecialchars($username) . "</strong> sudah digunakan oleh pengguna lain. Silakan pilih username lain.";
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $insert = $pdo->prepare("INSERT INTO users (nama, email, password, no_telp, role, created_at) VALUES (?, ?, ?, ?, 'pengunjung', NOW())");
-            if ($insert->execute([$nama, $email, $hash, $no_telp])) {
+            $insert = $pdo->prepare("INSERT INTO users (nama, username, email, password, no_telp, role, created_at) VALUES (?, ?, ?, ?, ?, 'pengunjung', NOW())");
+            
+            if ($insert->execute([$nama, $username, $email, $hash, $no_telp])) {
                 $newId = $pdo->lastInsertId();
                 
                 // Log pendaftaran
                 try {
                     $log = $pdo->prepare("INSERT INTO transaksi_log (user_id, tipe_transaksi, deskripsi, created_at) VALUES (?, 'kunjungan', ?, NOW())");
-                    $log->execute([$newId, 'Pendaftaran akun baru: ' . $nama]);
+                    $log->execute([$newId, 'Pendaftaran akun baru: ' . $nama . ' (@' . $username . ')']);
                 } catch (Exception $e) {}
 
-                // Auto login user
+                // Auto login user baru
                 $_SESSION['user_id'] = $newId;
                 $_SESSION['user_nama'] = $nama;
                 $_SESSION['user_email'] = $email;
                 $_SESSION['user_role'] = 'pengunjung';
                 $_SESSION['user_foto'] = 'default_avatar.png';
 
-                setFlash('success', 'Selamat datang, <strong>' . htmlspecialchars($nama) . '</strong>! Akun pengunjung Anda berhasil dibuat.');
+                setFlash('success', 'Selamat bergabung, <strong>' . htmlspecialchars($nama) . '</strong>! Akun pengunjung Anda berhasil dibuat.');
                 header("Location: " . BASE_URL . "pengunjung/index.php");
                 exit;
             } else {
@@ -73,11 +97,11 @@ require_once __DIR__ . '/includes/navbar.php';
 ?>
 
 <div class="auth-luxury-page">
-  <div class="container" style="max-width: 1040px; padding: 2.5rem 1rem;">
+  <div class="container" style="max-width: 1080px; padding: 2.5rem 1rem;">
     
-    <div class="auth-luxury-wrapper">
+    <div class="auth-luxury-card">
       
-      <!-- Left Side: Member Privilege Showcase -->
+      <!-- SISI KIRI: MEMBER PRIVILEGE SHOWCASE -->
       <div class="auth-brand-side">
         <div class="auth-brand-badge">
           <i class="fa-solid fa-sparkles text-amber"></i> Keuntungan Pengunjung Resmi
@@ -85,56 +109,65 @@ require_once __DIR__ . '/includes/navbar.php';
 
         <h1 class="auth-brand-title">
           Buka Pintu <br>
-          <span class="text-gradient-gold">Petualangan Seru</span>
+          <span class="text-gradient-gold">Petualangan Nusantara</span>
         </h1>
 
         <p class="auth-brand-desc">
-          Daftarkan akun pengunjung Anda secara gratis dalam 1 menit dan nikmati beragam fasilitas reservasi tiket digital prioritas terbaik di Indonesia.
+          Daftarkan akun pengunjung Anda secara gratis dalam 1 menit dan nikmati beragam kemudahan reservasi tiket digital resmi serta potongan promo rombongan otomatis.
         </p>
 
         <!-- Feature List with icons -->
         <div class="auth-privilege-list">
+          
           <div class="auth-privilege-item">
-            <div class="auth-privilege-icon"><i class="fa-solid fa-bolt text-amber"></i></div>
+            <div class="auth-privilege-icon">
+              <i class="fa-solid fa-qrcode"></i>
+            </div>
             <div>
-              <div class="auth-privilege-heading">Pemesanan Instan 1 Menit</div>
-              <div class="auth-privilege-text">Simpan data wisatawan dan pesan tiket dalam hitungan detik.</div>
+              <div class="auth-privilege-heading">E-Ticket QR Langsung Aktif</div>
+              <div class="auth-privilege-text">Simpan barcode digital di smartphone tanpa repot cetak fisik.</div>
             </div>
           </div>
 
           <div class="auth-privilege-item">
-            <div class="auth-privilege-icon" style="color: #38bdf8; background: rgba(56, 189, 248, 0.15);"><i class="fa-solid fa-receipt"></i></div>
+            <div class="auth-privilege-icon" style="color: #fbbf24; background: rgba(245, 158, 11, 0.15);">
+              <i class="fa-solid fa-tags"></i>
+            </div>
             <div>
-              <div class="auth-privilege-heading">Arsip Riwayat & E-Ticket QR</div>
-              <div class="auth-privilege-text">Akses seluruh tiket digital kapan pun tanpa risiko hilang.</div>
+              <div class="auth-privilege-heading">Diskon Rombongan Otomatis</div>
+              <div class="auth-privilege-text">Potongan harga grup hingga 20% langsung dihitung sistem.</div>
             </div>
           </div>
 
           <div class="auth-privilege-item">
-            <div class="auth-privilege-icon" style="color: #fbbf24; background: rgba(245, 158, 11, 0.15);"><i class="fa-solid fa-crown"></i></div>
+            <div class="auth-privilege-icon" style="color: #34d399; background: rgba(16, 185, 129, 0.15);">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
             <div>
-              <div class="auth-privilege-heading">Potongan Harga Rombongan Otomatis</div>
-              <div class="auth-privilege-text">Diskon hemat langsung untuk liburan bersama grup & sekolah.</div>
+              <div class="auth-privilege-heading">Riwayat Kunjungan Terpadu</div>
+              <div class="auth-privilege-text">Pantau seluruh invoice, status bayar, dan ulasan wisata Anda.</div>
             </div>
           </div>
+
         </div>
 
         <div class="auth-brand-footer">
-          <span><i class="fa-solid fa-circle-check text-emerald"></i> 100% Pendaftaran Gratis & Tanpa Biaya Tersembunyi</span>
+          <span><i class="fa-solid fa-shield-check text-emerald"></i> Pendaftaran 100% Gratis & Terverifikasi</span>
         </div>
       </div>
 
-      <!-- Right Side: Luxury Register Form -->
+      <!-- SISI KANAN: FORMULIR REGISTRASI BERKELAS -->
       <div class="auth-form-side">
         
         <div class="auth-form-header">
-          <div class="auth-logo-circle">
+          <div class="auth-logo-circle" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(13, 148, 136, 0.15)); color: #0284c7; border-color: rgba(2, 132, 199, 0.3);">
             <i class="fa-solid fa-user-plus"></i>
           </div>
           <h2 class="auth-form-title">Daftar Akun Baru</h2>
-          <p class="auth-form-subtitle">Lengkapi formulir singkat di bawah ini untuk membuat akun</p>
+          <p class="auth-form-subtitle">Lengkapi formulir singkat di bawah untuk memulai pengalaman liburan Anda</p>
         </div>
 
+        <!-- Alert Pesan Error -->
         <?php if ($error): ?>
           <div class="auth-alert auth-alert-danger">
             <i class="fa-solid fa-circle-exclamation auth-alert-icon"></i>
@@ -144,80 +177,94 @@ require_once __DIR__ . '/includes/navbar.php';
 
         <form method="POST" action="" autocomplete="on" id="mainRegisterForm">
           
-          <!-- Full Name -->
-          <div class="auth-form-group">
-            <label class="auth-label">Nama Lengkap *</label>
-            <div class="auth-input-container">
-              <i class="fa-solid fa-user auth-input-icon"></i>
-              <input type="text" name="nama" id="regNama" class="auth-input-field" placeholder="Contoh: Budi Santoso" required value="<?= htmlspecialchars($namaInput) ?>" autofocus>
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div class="auth-form-group">
-            <label class="auth-label">Alamat Email Resmi *</label>
-            <div class="auth-input-container">
-              <i class="fa-solid fa-envelope auth-input-icon"></i>
-              <input type="email" name="email" id="regEmail" class="auth-input-field" placeholder="nama@email.com" required value="<?= htmlspecialchars($emailInput) ?>">
-            </div>
-          </div>
-
-          <!-- WhatsApp / Phone -->
-          <div class="auth-form-group">
-            <label class="auth-label">Nomor WhatsApp / HP Aktif</label>
-            <div class="auth-input-container">
-              <i class="fa-solid fa-phone auth-input-icon"></i>
-              <input type="tel" name="no_telp" id="regTelp" class="auth-input-field" placeholder="081234567890" value="<?= htmlspecialchars($telpInput) ?>">
-            </div>
-          </div>
-
-          <!-- Password & Confirm in 2 Cols -->
-          <div class="grid grid-cols-2 gap-4" style="margin-bottom: 1.35rem;">
-            <div>
-              <label class="auth-label">Kata Sandi *</label>
+          <div class="grid grid-cols-2 gap-4">
+            
+            <!-- Nama Lengkap Input -->
+            <div class="auth-form-group">
+              <label class="auth-label">Nama Lengkap <span class="text-danger">*</span></label>
               <div class="auth-input-container">
-                <i class="fa-solid fa-lock auth-input-icon"></i>
-                <input type="password" name="password" id="regPassword" class="auth-input-field" placeholder="Min. 6 Karakter" required oninput="checkStrength(this.value)">
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('regPassword', 'eyeIconPass')" title="Tampilkan Sandi">
-                  <i class="fa-regular fa-eye" id="eyeIconPass"></i>
-                </button>
+                <i class="fa-solid fa-user-tag auth-input-icon"></i>
+                <input type="text" name="nama" id="regNama" class="auth-input-field" placeholder="Cth: Muhammad Iqbal" required value="<?= htmlspecialchars($namaInput) ?>" autofocus>
               </div>
             </div>
 
-            <div>
-              <label class="auth-label">Konfirmasi Sandi *</label>
+            <!-- Username Input -->
+            <div class="auth-form-group">
+              <label class="auth-label">Username Akun <span class="text-danger">*</span></label>
               <div class="auth-input-container">
-                <i class="fa-solid fa-shield-halved auth-input-icon"></i>
-                <input type="password" name="konfirmasi_password" id="regConfirmPassword" class="auth-input-field" placeholder="Ulangi Sandi" required>
-                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('regConfirmPassword', 'eyeIconConfirm')" title="Tampilkan Sandi">
-                  <i class="fa-regular fa-eye" id="eyeIconConfirm"></i>
-                </button>
+                <i class="fa-solid fa-at auth-input-icon"></i>
+                <input type="text" name="username" id="regUsername" class="auth-input-field" placeholder="Cth: iqbal_traveler" required value="<?= htmlspecialchars($usernameInput) ?>">
               </div>
             </div>
+
           </div>
 
-          <!-- Password Strength Indicator -->
-          <div id="passwordStrengthBox" style="margin-top: -0.75rem; margin-bottom: 1.25rem; display: none;">
-            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.72rem; color: #64748b; margin-bottom: 0.3rem;">
-              <span>Kekuatan Kata Sandi:</span>
-              <strong id="strengthLabel" style="color: #ef4444;">Lemah</strong>
+          <div class="grid grid-cols-2 gap-4">
+            
+            <!-- Email Input -->
+            <div class="auth-form-group">
+              <label class="auth-label">Alamat Email <span class="text-danger">*</span></label>
+              <div class="auth-input-container">
+                <i class="fa-solid fa-envelope auth-input-icon"></i>
+                <input type="email" name="email" id="regEmail" class="auth-input-field" placeholder="nama@email.com" required value="<?= htmlspecialchars($emailInput) ?>">
+              </div>
             </div>
-            <div style="height: 4px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
-              <div id="strengthBar" style="height: 100%; width: 25%; background: #ef4444; transition: all 0.3s ease;"></div>
+
+            <!-- No Telp / WhatsApp Input -->
+            <div class="auth-form-group">
+              <label class="auth-label">No. WhatsApp / HP</label>
+              <div class="auth-input-container">
+                <i class="fa-brands fa-whatsapp auth-input-icon" style="color: #10b981;"></i>
+                <input type="tel" name="no_telp" id="regTelp" class="auth-input-field" placeholder="08xxxxxxxxxx" value="<?= htmlspecialchars($telpInput) ?>">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Password Input with Strength Meter -->
+          <div class="auth-form-group">
+            <label class="auth-label">Kata Sandi Baru <span class="text-danger">*</span></label>
+            <div class="auth-input-container">
+              <i class="fa-solid fa-lock auth-input-icon"></i>
+              <input type="password" name="password" id="regPassword" class="auth-input-field" placeholder="Minimal 6 karakter kombinasi" required minlength="6" onkeyup="checkRegPasswordStrength(this.value)">
+              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('regPassword', 'eyeIconReg')" title="Tampilkan/Sembunyikan">
+                <i class="fa-regular fa-eye" id="eyeIconReg"></i>
+              </button>
+            </div>
+
+            <!-- Password Strength Meter -->
+            <div class="password-meter-wrap" id="regPasswordMeterWrap">
+              <div class="password-meter-bar">
+                <div class="password-meter-fill" id="regPasswordMeterFill"></div>
+              </div>
+              <span class="password-meter-text" id="regPasswordMeterText">Kekuatan Sandi: Belum diisi</span>
             </div>
           </div>
 
-          <!-- Terms Checkbox -->
-          <div class="auth-extra-row" style="margin-bottom: 1.5rem;">
+          <!-- Confirm Password Input -->
+          <div class="auth-form-group">
+            <label class="auth-label">Ulangi Kata Sandi <span class="text-danger">*</span></label>
+            <div class="auth-input-container">
+              <i class="fa-solid fa-shield-check auth-input-icon"></i>
+              <input type="password" name="konfirmasi_password" id="regConfirmPassword" class="auth-input-field" placeholder="Ketik ulang kata sandi Anda" required minlength="6" onkeyup="checkRegPasswordMatch()">
+              <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('regConfirmPassword', 'eyeIconRegConfirm')" title="Tampilkan/Sembunyikan">
+                <i class="fa-regular fa-eye" id="eyeIconRegConfirm"></i>
+              </button>
+            </div>
+            <div id="regPasswordMatchMsg" class="auth-hint-text"></div>
+          </div>
+
+          <!-- Terms Agreement -->
+          <div class="auth-extra-row">
             <label class="auth-checkbox-label">
-              <input type="checkbox" required checked class="auth-checkbox">
-              <span>Saya menyetujui seluruh <a href="<?= BASE_URL ?>index.php#faq" style="color:#0d9488; font-weight:700;">Ketentuan Layanan & Privasi</a> tiket wisata.</span>
+              <input type="checkbox" name="agree" class="auth-checkbox" required checked>
+              <span>Saya menyetujui Ketentuan Layanan & Kebijakan Privasi</span>
             </label>
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="auth-submit-btn">
-            <span>Daftar Akun Pengunjung</span>
+          <button type="submit" class="auth-submit-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);">
+            <span>Buat Akun Pengunjung Sekarang</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
 
@@ -226,12 +273,12 @@ require_once __DIR__ . '/includes/navbar.php';
         <!-- Switch to Login -->
         <div class="auth-switch-box">
           Sudah memiliki akun terdaftar? 
-          <a href="<?= BASE_URL ?>login.php" class="auth-switch-link">Masuk di sini</a>
+          <a href="<?= BASE_URL ?>login.php" class="auth-switch-link font-bold">Masuk ke Akun Anda</a>
         </div>
 
         <div class="auth-security-footnote">
           <i class="fa-solid fa-shield-halved text-emerald"></i>
-          <span>Data Pribadi Anda Dijamin Aman & Terlindungi</span>
+          <span>Data Anda Dijamin Aman & Terenkripsi Sesuai Regulasi Wisata</span>
         </div>
 
       </div>
@@ -243,224 +290,201 @@ require_once __DIR__ . '/includes/navbar.php';
 
 <style>
 /* ==========================================================================
-   ULTRA-LUXURY AUTH PAGES STYLING (LOGIN & REGISTER)
+   ULTRA-LUXURY REGISTER PAGE STYLING
    ========================================================================== */
 .auth-luxury-page {
   min-height: 86vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 10% 20%, rgba(13, 148, 136, 0.08) 0%, transparent 45%),
-              radial-gradient(circle at 90% 80%, rgba(2, 132, 199, 0.08) 0%, transparent 45%),
+  background: radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.08) 0%, transparent 45%),
+              radial-gradient(circle at 90% 80%, rgba(13, 148, 136, 0.08) 0%, transparent 45%),
               #f8fafc;
-  padding: 2rem 0;
+  padding: 3rem 0;
 }
 
-.auth-luxury-wrapper {
+.auth-luxury-card {
   background: #ffffff;
   border-radius: 1.75rem;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(241, 245, 249, 0.8);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
+  grid-template-columns: 1fr 1.25fr;
   overflow: hidden;
+  margin: 0 auto;
 }
 
-/* Left Brand Side */
 .auth-brand-side {
-  background: linear-gradient(135deg, #090d16 0%, #042426 50%, #082f49 100%);
-  color: #ffffff;
+  background: radial-gradient(circle at 70% 30%, #0c4a6e 0%, #090d16 100%);
   padding: 3.5rem 3rem;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
-  overflow: hidden;
-}
-
-.auth-brand-side::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  right: -20%;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(45, 212, 191, 0.18) 0%, transparent 70%);
-  pointer-events: none;
 }
 
 .auth-brand-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #5eead4;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.35rem 0.95rem;
+  padding: 0.4rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
   width: fit-content;
-  margin-bottom: 2rem;
 }
 
 .auth-brand-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 2.3rem;
+  font-size: 2.35rem;
   font-weight: 900;
   line-height: 1.2;
+  margin-bottom: 1.25rem;
   color: #ffffff;
-  margin-bottom: 1rem;
-}
-
-.text-gradient-gold {
-  background: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 50%, #fbbf24 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .auth-brand-desc {
   font-size: 0.92rem;
   color: #94a3b8;
   line-height: 1.7;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2rem;
 }
 
 .auth-privilege-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   margin-bottom: 2.5rem;
 }
 
 .auth-privilege-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  transition: all 0.25s ease;
+}
+
+.auth-privilege-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateX(4px);
 }
 
 .auth-privilege-icon {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: rgba(45, 212, 191, 0.15);
-  border: 1px solid rgba(45, 212, 191, 0.3);
-  color: #2dd4bf;
+  background: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 
 .auth-privilege-heading {
-  font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
+  font-weight: 800;
   color: #ffffff;
-  margin-bottom: 0.2rem;
 }
 
 .auth-privilege-text {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #94a3b8;
-  line-height: 1.45;
 }
 
 .auth-brand-footer {
   font-size: 0.78rem;
-  color: #64748b;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1.25rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Right Form Side */
+/* Sisi Kanan: Form */
 .auth-form-side {
   padding: 3.5rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #ffffff;
 }
 
 .auth-form-header {
-  text-align: left;
-  margin-bottom: 2rem;
+  text-align: center;
+  margin-bottom: 1.75rem;
 }
 
 .auth-logo-circle {
-  width: 54px;
-  height: 54px;
+  width: 56px;
+  height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(2, 132, 199, 0.15));
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  color: #0d9488;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 10px 20px rgba(13, 148, 136, 0.25);
+  margin: 0 auto 1rem;
 }
 
 .auth-form-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: #0f172a;
   margin-bottom: 0.35rem;
-  letter-spacing: -0.02em;
 }
 
 .auth-form-subtitle {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: #64748b;
 }
 
-/* Alerts */
 .auth-alert {
-  padding: 0.85rem 1.1rem;
+  padding: 0.85rem 1.15rem;
   border-radius: 0.85rem;
   font-size: 0.85rem;
-  line-height: 1.5;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
+  line-height: 1.5;
 }
 
 .auth-alert-danger {
-  background: #fef2f2;
+  background: #fee2e2;
   border: 1px solid #fecaca;
-  color: #991b1b;
-}
-
-.auth-alert-warning {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  color: #92400e;
+  color: #b91c1c;
 }
 
 .auth-alert-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  margin-top: 0.1rem;
   flex-shrink: 0;
 }
 
-/* Form inputs */
 .auth-form-group {
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.15rem;
 }
 
 .auth-label {
   display: block;
   font-size: 0.78rem;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #475569;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.35rem;
 }
 
 .auth-input-container {
@@ -471,210 +495,223 @@ require_once __DIR__ . '/includes/navbar.php';
 
 .auth-input-icon {
   position: absolute;
-  left: 1.15rem;
-  color: #94a3b8;
-  font-size: 1.05rem;
+  left: 1rem;
+  color: #0284c7;
+  font-size: 1rem;
   pointer-events: none;
-  transition: color 0.2s;
 }
 
 .auth-input-field {
   width: 100%;
-  padding: 0.85rem 1.1rem 0.85rem 3rem;
+  padding: 0.8rem 2.8rem 0.8rem 2.75rem;
+  background: #f8fafc;
   border: 1.5px solid #cbd5e1;
   border-radius: 0.85rem;
-  background: #f8fafc;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.9rem;
   color: #0f172a;
+  font-weight: 600;
   outline: none;
   transition: all 0.25s ease;
 }
 
 .auth-input-field:focus {
   background: #ffffff;
-  border-color: #0d9488;
-  box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
-}
-
-.auth-input-field:focus + .auth-input-icon,
-.auth-input-container:focus-within .auth-input-icon {
-  color: #0d9488;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
 }
 
 .auth-password-toggle {
   position: absolute;
-  right: 1.1rem;
-  background: none;
+  right: 1rem;
+  background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  padding: 0.25rem;
-  transition: color 0.2s;
 }
 
 .auth-password-toggle:hover {
-  color: #0d9488;
+  color: #0f172a;
+}
+
+.password-meter-wrap {
+  margin-top: 0.4rem;
+}
+
+.password-meter-bar {
+  width: 100%;
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 0.25rem;
+}
+
+.password-meter-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-meter-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.auth-hint-text {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 0.3rem;
+  display: block;
 }
 
 .auth-extra-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .auth-checkbox-label {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
-  font-size: 0.83rem;
-  color: #64748b;
+  font-size: 0.8rem;
+  color: #475569;
   cursor: pointer;
   user-select: none;
-  line-height: 1.5;
 }
 
-.auth-checkbox {
-  width: 1.05rem;
-  height: 1.05rem;
-  accent-color: #0d9488;
-  border-radius: 0.35rem;
-  cursor: pointer;
-  margin-top: 0.15rem;
-}
-
-/* Submit Button */
 .auth-submit-btn {
   width: 100%;
-  padding: 0.95rem 1.75rem;
-  border-radius: 0.85rem;
-  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  padding: 0.95rem 1.5rem;
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
   color: #ffffff;
   border: none;
-  font-size: 1rem;
+  border-radius: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  box-shadow: 0 10px 25px rgba(13, 148, 136, 0.35);
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
   transition: all 0.25s ease;
 }
 
 .auth-submit-btn:hover {
-  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
-  box-shadow: 0 14px 30px rgba(13, 148, 136, 0.45);
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.55);
 }
 
-.auth-submit-btn:active {
-  transform: translateY(0);
-}
-
-/* Switch Link */
 .auth-switch-box {
   text-align: center;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: #64748b;
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #f1f5f9;
+  margin-top: 1.5rem;
 }
 
 .auth-switch-link {
-  font-weight: 800;
-  color: #0d9488;
+  color: #0284c7;
   text-decoration: none;
-  margin-left: 0.25rem;
 }
 
 .auth-switch-link:hover {
   text-decoration: underline;
-  color: #0f766e;
 }
 
 .auth-security-footnote {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
-  font-size: 0.75rem;
+  gap: 0.4rem;
+  font-size: 0.72rem;
   color: #94a3b8;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
+  text-align: center;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .auth-luxury-wrapper {
-    grid-template-columns: 1fr;
-  }
-  .auth-brand-side {
-    padding: 2.5rem 2rem;
-  }
-  .auth-form-side {
-    padding: 2.5rem 2rem;
-  }
+@media (max-width: 960px) {
+  .auth-luxury-card { grid-template-columns: 1fr; }
+  .auth-brand-side { display: none; }
+  .auth-form-side { padding: 2.5rem 1.75rem; }
+  .grid-cols-2 { grid-template-columns: 1fr; }
 }
 </style>
 
 <script>
-function togglePasswordVisibility(fieldId, iconId) {
-  const field = document.getElementById(fieldId);
-  const icon = document.getElementById(iconId);
-  if (field.type === 'password') {
-    field.type = 'text';
-    icon.classList.remove('fa-eye');
-    icon.classList.add('fa-eye-slash');
-  } else {
-    field.type = 'password';
-    icon.classList.remove('fa-eye-slash');
-    icon.classList.add('fa-eye');
-  }
-}
+  function togglePasswordVisibility(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (!input || !icon) return;
 
-function checkStrength(pass) {
-  const box = document.getElementById('passwordStrengthBox');
-  const bar = document.getElementById('strengthBar');
-  const label = document.getElementById('strengthLabel');
-  
-  if (!pass || pass.length === 0) {
-    box.style.display = 'none';
-    return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'fa-regular fa-eye-slash';
+    } else {
+      input.type = 'password';
+      icon.className = 'fa-regular fa-eye';
+    }
   }
-  
-  box.style.display = 'block';
-  
-  let score = 0;
-  if (pass.length >= 6) score++;
-  if (pass.length >= 8) score++;
-  if (/[0-9]/.test(pass)) score++;
-  if (/[A-Z]/.test(pass) || /[^A-Za-z0-9]/.test(pass)) score++;
-  
-  if (score <= 1) {
-    bar.style.width = '25%';
-    bar.style.backgroundColor = '#ef4444';
-    label.innerText = 'Lemah';
-    label.style.color = '#ef4444';
-  } else if (score === 2) {
-    bar.style.width = '50%';
-    bar.style.backgroundColor = '#f59e0b';
-    label.innerText = 'Sedang';
-    label.style.color = '#f59e0b';
-  } else if (score === 3) {
-    bar.style.width = '75%';
-    bar.style.backgroundColor = '#0284c7';
-    label.innerText = 'Kuat';
-    label.style.color = '#0284c7';
-  } else {
-    bar.style.width = '100%';
-    bar.style.backgroundColor = '#10b981';
-    label.innerText = 'Sangat Kuat & Aman';
-    label.style.color = '#10b981';
+
+  function checkRegPasswordStrength(val) {
+    const fill = document.getElementById('regPasswordMeterFill');
+    const text = document.getElementById('regPasswordMeterText');
+    if (!fill || !text) return;
+
+    if (!val || val.length === 0) {
+      fill.style.width = '0%';
+      text.innerText = 'Kekuatan Sandi: Belum diisi';
+      text.style.color = '#64748b';
+      return;
+    }
+
+    let score = 0;
+    if (val.length >= 6) score += 25;
+    if (val.length >= 8) score += 25;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 25;
+    if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score += 25;
+
+    fill.style.width = score + '%';
+
+    if (score <= 25) {
+      fill.style.backgroundColor = '#ef4444';
+      text.innerText = 'Kekuatan Sandi: Sangat Lemah (min 6 karakter)';
+      text.style.color = '#ef4444';
+    } else if (score <= 50) {
+      fill.style.backgroundColor = '#f59e0b';
+      text.innerText = 'Kekuatan Sandi: Cukup (tambahkan angka/simbol)';
+      text.style.color = '#d97706';
+    } else if (score <= 75) {
+      fill.style.backgroundColor = '#3b82f6';
+      text.innerText = 'Kekuatan Sandi: Bagus & Aman';
+      text.style.color = '#2563eb';
+    } else {
+      fill.style.backgroundColor = '#10b981';
+      text.innerText = 'Kekuatan Sandi: Sangat Kuat & Optimal';
+      text.style.color = '#059669';
+    }
+    checkRegPasswordMatch();
   }
-}
+
+  function checkRegPasswordMatch() {
+    const p1 = document.getElementById('regPassword');
+    const p2 = document.getElementById('regConfirmPassword');
+    const msg = document.getElementById('regPasswordMatchMsg');
+    if (!p1 || !p2 || !msg) return;
+
+    if (!p2.value) {
+      msg.innerHTML = '';
+      return;
+    }
+
+    if (p1.value === p2.value) {
+      msg.innerHTML = '<span class="text-success font-bold"><i class="fa-solid fa-check"></i> Konfirmasi kata sandi cocok!</span>';
+    } else {
+      msg.innerHTML = '<span class="text-danger font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Kata sandi belum cocok.</span>';
+    }
+  }
 </script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

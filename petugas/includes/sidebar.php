@@ -18,58 +18,65 @@ if (isset($pdo) && $pdo) {
         $todayCntValidasi = (int)$pdo->query("SELECT COUNT(*) FROM pemesanan WHERE status_kunjungan = 'sudah_digunakan' AND DATE(waktu_checkin) = CURDATE()")->fetchColumn();
     } catch (Exception $e) {}
 }
+
+$sessFoto = $_SESSION['user_foto'] ?? 'default_avatar.png';
+$hasSessFoto = (!empty($sessFoto) && $sessFoto !== 'default_avatar.png' && file_exists(__DIR__ . '/../../assets/uploads/users/' . $sessFoto));
 ?>
 <aside class="admin-sidebar">
   
   <!-- Brand Header -->
-  <div class="admin-sidebar-brand" style="padding: 1.25rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
-    <div class="admin-brand-icon" style="background: linear-gradient(135deg, #0d9488 0%, #0284c7 100%); box-shadow: 0 4px 14px rgba(13, 148, 136, 0.4); width: 42px; height: 42px; border-radius: 0.75rem;">
-      <i class="fa-solid fa-id-badge text-white" style="font-size: 1.15rem;"></i>
+  <div class="admin-sidebar-brand" style="padding: 0.6rem 0.8rem; display: flex; align-items: center; gap: 0.55rem; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02);">
+    <div class="admin-brand-icon-luxury admin-icon-petugas">
+      <span class="luxury-emote-brand">🎫</span>
     </div>
-    <div style="overflow: hidden; flex: 1;">
-      <span style="display: block; font-weight: 800; font-size: 0.95rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: 'Outfit', sans-serif;">
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <span style="display: block; font-weight: 800; font-size: 0.88rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-family: 'Outfit', sans-serif; line-height: 1.2;">
         <?= htmlspecialchars($settings['nama_sistem'] ?? 'Pesona Nusantara') ?>
       </span>
-      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #2dd4bf; font-weight: 700;">
-        <span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 10px #22c55e; animation: pulse 2s infinite;"></span>
-        Petugas Loket & Gate
+      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: #2dd4bf; font-weight: 700; line-height: 1.2;">
+        <span class="pulse-online" style="width: 5px; height: 5px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 6px #22c55e;"></span>
+        Gate & Loket Terminal
       </span>
     </div>
   </div>
 
   <!-- Profile Card -->
-  <div class="admin-profile-pill" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); margin: 1rem 1rem 0.5rem 1rem; border-radius: 0.85rem; padding: 0.75rem;">
-    <div class="admin-avatar" style="background: linear-gradient(135deg, #0d9488, #0284c7); width: 38px; height: 38px; font-weight: 800; font-size: 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-      <?= $initial ?>
-    </div>
-    <div style="overflow: hidden; flex: 1;">
-      <strong style="display: block; font-size: 0.875rem; color: #f8fafc; font-weight: 800; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+  <div class="admin-profile-pill" style="padding: 0.35rem 0.6rem; margin: 0.3rem 0.65rem 0.2rem 0.65rem; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.65rem; display: flex; align-items: center; gap: 0.5rem;">
+    <?php if ($hasSessFoto): ?>
+      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($sessFoto) ?>" alt="Avatar" style="width: 28px; height: 28px; min-width: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #2dd4bf; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+    <?php else: ?>
+      <div class="admin-avatar" style="background: linear-gradient(135deg, #0d9488, #0284c7); width: 28px; height: 28px; min-width: 28px; font-weight: 800; font-size: 0.8rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; border: 1px solid rgba(255,255,255,0.2);">
+        <?= $initial ?>
+      </div>
+    <?php endif; ?>
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <strong style="display: block; font-size: 0.8rem; color: #f8fafc; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userName) ?>
       </strong>
-      <span style="font-size: 0.72rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+      <span style="font-size: 0.68rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userEmail) ?>
       </span>
     </div>
   </div>
 
   <!-- Navigation Menu -->
-  <ul class="admin-nav-list" style="padding: 0.75rem 1rem;">
+  <ul class="admin-nav-list" style="padding: 0.75rem 0.85rem; list-style: none; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; margin: 0;">
     
-    <li style="padding: 0.6rem 0.5rem 0.25rem 0.5rem; font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">
+    <li style="padding: 0.65rem 0.6rem 0.25rem 0.6rem; font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">
       Operasional Gate
     </li>
 
     <li class="admin-nav-item">
-      <a href="<?= BASE_URL ?>petugas/index.php" class="admin-nav-link <?= ($currentFile == 'index.php') ? 'active' : '' ?>">
-        <i class="fa-solid fa-gauge-high"></i>
-        <span style="flex: 1;">Dashboard Petugas</span>
+      <a href="<?= BASE_URL ?>petugas/index.php" class="admin-nav-link <?= ($currentFile == 'index.php') ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 0.7rem; font-size: 0.85rem; font-weight: 700; color: <?= ($currentFile == 'index.php') ? '#ffffff' : '#94a3b8' ?>; background: <?= ($currentFile == 'index.php') ? 'linear-gradient(90deg, rgba(13,148,136,0.3) 0%, rgba(13,148,136,0.1) 100%)' : 'transparent' ?>; border-left: 3px solid <?= ($currentFile == 'index.php') ? '#2dd4bf' : 'transparent' ?>; text-decoration: none; transition: all 0.2s ease;">
+        <i class="fa-solid fa-gauge-high" style="font-size: 0.95rem; width: 20px; text-align: center; color: <?= ($currentFile == 'index.php') ? '#2dd4bf' : '#64748b' ?>;"></i>
+        <span style="flex: 1;">Dashboard</span>
       </a>
     </li>
 
     <li class="admin-nav-item">
-      <a href="<?= BASE_URL ?>petugas/validasi_tiket.php" class="admin-nav-link <?= ($currentFile == 'validasi_tiket.php') ? 'active' : '' ?>">
-        <i class="fa-solid fa-qrcode"></i>
-        <span style="flex: 1;">Scan & Validasi Tiket</span>
+      <a href="<?= BASE_URL ?>petugas/validasi_tiket.php" class="admin-nav-link <?= ($currentFile == 'validasi_tiket.php') ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 0.7rem; font-size: 0.85rem; font-weight: 700; color: <?= ($currentFile == 'validasi_tiket.php') ? '#ffffff' : '#94a3b8' ?>; background: <?= ($currentFile == 'validasi_tiket.php') ? 'linear-gradient(90deg, rgba(13,148,136,0.3) 0%, rgba(13,148,136,0.1) 100%)' : 'transparent' ?>; border-left: 3px solid <?= ($currentFile == 'validasi_tiket.php') ? '#2dd4bf' : 'transparent' ?>; text-decoration: none; transition: all 0.2s ease;">
+        <i class="fa-solid fa-qrcode" style="font-size: 0.95rem; width: 20px; text-align: center; color: <?= ($currentFile == 'validasi_tiket.php') ? '#2dd4bf' : '#64748b' ?>;"></i>
+        <span style="flex: 1;">Scan E-Tiket Gate</span>
         <?php if ($todayCntValidasi > 0): ?>
           <span style="background: #059669; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 9999px;">
             <?= $todayCntValidasi ?> Scan
@@ -79,16 +86,16 @@ if (isset($pdo) && $pdo) {
     </li>
 
     <li class="admin-nav-item">
-      <a href="<?= BASE_URL ?>petugas/input_kunjungan.php" class="admin-nav-link <?= ($currentFile == 'input_kunjungan.php') ? 'active' : '' ?>">
-        <i class="fa-solid fa-pen-to-square"></i>
+      <a href="<?= BASE_URL ?>petugas/input_kunjungan.php" class="admin-nav-link <?= ($currentFile == 'input_kunjungan.php') ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 0.7rem; font-size: 0.85rem; font-weight: 700; color: <?= ($currentFile == 'input_kunjungan.php') ? '#ffffff' : '#94a3b8' ?>; background: <?= ($currentFile == 'input_kunjungan.php') ? 'linear-gradient(90deg, rgba(13,148,136,0.3) 0%, rgba(13,148,136,0.1) 100%)' : 'transparent' ?>; border-left: 3px solid <?= ($currentFile == 'input_kunjungan.php') ? '#2dd4bf' : 'transparent' ?>; text-decoration: none; transition: all 0.2s ease;">
+        <i class="fa-solid fa-pen-to-square" style="font-size: 0.95rem; width: 20px; text-align: center; color: <?= ($currentFile == 'input_kunjungan.php') ? '#2dd4bf' : '#64748b' ?>;"></i>
         <span style="flex: 1;">Input Presensi Loket</span>
       </a>
     </li>
 
     <li class="admin-nav-item">
-      <a href="<?= BASE_URL ?>petugas/riwayat_input.php" class="admin-nav-link <?= ($currentFile == 'riwayat_input.php') ? 'active' : '' ?>">
-        <i class="fa-solid fa-clipboard-list"></i>
-        <span style="flex: 1;">Riwayat Input Saya</span>
+      <a href="<?= BASE_URL ?>petugas/riwayat_input.php" class="admin-nav-link <?= ($currentFile == 'riwayat_input.php') ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 0.7rem; font-size: 0.85rem; font-weight: 700; color: <?= ($currentFile == 'riwayat_input.php') ? '#ffffff' : '#94a3b8' ?>; background: <?= ($currentFile == 'riwayat_input.php') ? 'linear-gradient(90deg, rgba(13,148,136,0.3) 0%, rgba(13,148,136,0.1) 100%)' : 'transparent' ?>; border-left: 3px solid <?= ($currentFile == 'riwayat_input.php') ? '#2dd4bf' : 'transparent' ?>; text-decoration: none; transition: all 0.2s ease;">
+        <i class="fa-solid fa-clipboard-list" style="font-size: 0.95rem; width: 20px; text-align: center; color: <?= ($currentFile == 'riwayat_input.php') ? '#2dd4bf' : '#64748b' ?>;"></i>
+        <span style="flex: 1;">Riwayat Input Presensi</span>
         <?php if ($todayCntPengunjung > 0): ?>
           <span style="background: #0284c7; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.5rem; border-radius: 9999px;">
             <?= number_format($todayCntPengunjung) ?> Org
@@ -100,12 +107,10 @@ if (isset($pdo) && $pdo) {
   </ul>
 
   <!-- Sidebar Footer -->
-  <div class="admin-sidebar-footer" style="padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 0.5rem;">
-    <a href="<?= BASE_URL ?>index.php" target="_blank" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); justify-content: center; width: 100%; border-radius: 0.65rem; font-weight: 700;">
-      <i class="fa-solid fa-globe"></i> Buka Portal Wisata
-    </a>
-    <a href="<?= BASE_URL ?>logout.php" class="btn btn-danger btn-sm" style="justify-content: center; width: 100%; border-radius: 0.65rem; font-weight: 700;" onclick="return confirm('Apakah Anda yakin ingin keluar dari sesi petugas?')">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar Shift
+  <div class="admin-sidebar-footer">
+    <a href="<?= BASE_URL ?>logout.php" class="admin-footer-logout-single" onclick="return confirm('Apakah Anda yakin ingin menyelesaikan shift dan keluar?')" title="Selesai Shift & Keluar">
+      <span class="admin-footer-logout-icon">🚪</span>
+      <span>Selesai Shift & Keluar</span>
     </a>
   </div>
 

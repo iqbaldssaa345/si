@@ -218,10 +218,21 @@ $flash = getFlash();
                 
                 <!-- Thumb Photo -->
                 <div style="width: 60px; height: 60px; min-width: 60px; border-radius: 0.45rem; overflow: hidden; background: #0f172a;">
-                  <img src="<?= BASE_URL ?>assets/uploads/destinasi/<?= htmlspecialchars($r['foto_utama']) ?>" 
+                  <?php 
+                    $rFoto = trim($r['foto_utama'] ?? '');
+                    if (!empty($rFoto) && (strpos($rFoto, 'http://') === 0 || strpos($rFoto, 'https://') === 0)) {
+                        $rFotoUrl = $rFoto;
+                    } elseif (!empty($rFoto) && file_exists(__DIR__ . '/../assets/uploads/destinasi/' . $rFoto)) {
+                        $rFotoUrl = BASE_URL . 'assets/uploads/destinasi/' . $rFoto;
+                    } else {
+                        $rFotoUrl = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80';
+                    }
+                  ?>
+                  <img src="<?= htmlspecialchars($rFotoUrl) ?>" 
                        alt="<?= htmlspecialchars($r['nama_destinasi']) ?>" 
                        style="width: 100%; height: 100%; object-fit: cover;"
-                       onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'">
+                       loading="lazy"
+                       onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=80'">
                 </div>
 
                 <!-- Review Content -->

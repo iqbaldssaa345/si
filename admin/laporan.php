@@ -87,60 +87,73 @@ if (!$isPrint) {
   </div>
 
   <!-- Filter Card -->
-  <div class="card p-4 shadow-sm mb-6 bg-white no-print" style="border-radius: var(--radius-lg);">
-    <form action="<?= BASE_URL ?>admin/laporan.php" method="GET" class="flex items-center gap-4" style="flex-wrap: wrap;">
+  <div class="card p-3 shadow-sm mb-4 bg-white no-print" style="border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+    <form action="<?= BASE_URL ?>admin/laporan.php" method="GET" class="flex items-center gap-2" style="flex-wrap: wrap;">
       <div class="flex items-center gap-2">
-        <label class="text-xs font-bold text-muted uppercase">Mulai:</label>
-        <input type="date" name="tgl_mulai" class="form-control text-sm" value="<?= htmlspecialchars($tglMulai) ?>" required>
+        <label class="form-label" style="margin: 0; font-size: 0.75rem;">Mulai:</label>
+        <input type="date" name="tgl_mulai" class="form-control" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;" value="<?= htmlspecialchars($tglMulai) ?>" required>
       </div>
 
       <div class="flex items-center gap-2">
-        <label class="text-xs font-bold text-muted uppercase">Sampai:</label>
-        <input type="date" name="tgl_selesai" class="form-control text-sm" value="<?= htmlspecialchars($tglSelesai) ?>" required>
+        <label class="form-label" style="margin: 0; font-size: 0.75rem;">Sampai:</label>
+        <input type="date" name="tgl_selesai" class="form-control" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;" value="<?= htmlspecialchars($tglSelesai) ?>" required>
       </div>
 
       <div class="flex items-center gap-2">
-        <label class="text-xs font-bold text-muted uppercase">Kategori:</label>
-        <select name="tipe" class="form-control text-sm">
+        <label class="form-label" style="margin: 0; font-size: 0.75rem;">Kategori:</label>
+        <select name="tipe" class="form-control" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;">
           <option value="semua" <?= $tipeLaporan === 'semua' ? 'selected' : '' ?>>Semua Data</option>
           <option value="pemesanan" <?= $tipeLaporan === 'pemesanan' ? 'selected' : '' ?>>Hanya Pemesanan (Keuangan)</option>
           <option value="kunjungan" <?= $tipeLaporan === 'kunjungan' ? 'selected' : '' ?>>Hanya Kunjungan Lapangan</option>
         </select>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-sm">
+      <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 700;">
         <i class="fa-solid fa-filter"></i> Tampilkan
       </button>
     </form>
   </div>
 
   <!-- Summary KPI Cards -->
-  <div class="grid grid-cols-3 gap-6 mb-8">
-    <div class="card p-6 shadow-sm border" style="border-radius: var(--radius-lg);">
-      <span class="text-xs font-bold text-muted uppercase">Total Omset Tiket Lunas</span>
-      <h2 class="text-2xl font-black text-primary mt-1"><?= formatRupiah($totalOmsetLunas) ?></h2>
-      <span class="text-xs text-muted"><?= count($laporanPemesanan) ?> Transaksi Terdata</span>
+  <div class="grid grid-cols-3 gap-4 mb-4 no-print">
+    <div class="kpi-card-luxury kpi-success">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Omset Lunas</span>
+        <span class="badge-luxury badge-luxury-success" style="font-size: 0.68rem;">Terverifikasi</span>
+      </div>
+      <h2 style="font-size: 1.35rem; font-weight: 900; color: #059669; margin: 0.1rem 0; font-family: 'Outfit', sans-serif;"><?= formatRupiah($totalOmsetLunas) ?></h2>
+      <span style="font-size: 0.72rem; color: #64748b;"><?= count($laporanPemesanan) ?> Transaksi Terdata</span>
     </div>
 
-    <div class="card p-6 shadow-sm border" style="border-radius: var(--radius-lg);">
-      <span class="text-xs font-bold text-muted uppercase">Total Tiket Online Terjual</span>
-      <h2 class="text-2xl font-black text-dark mt-1"><?= number_format($totalTiketTerjual) ?> Tiket</h2>
-      <span class="text-xs text-muted">Tiket terverifikasi</span>
+    <div class="kpi-card-luxury kpi-primary">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Tiket Terjual</span>
+        <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">E-Ticket</span>
+      </div>
+      <h2 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.1rem 0; font-family: 'Outfit', sans-serif;"><?= number_format($totalTiketTerjual) ?> <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Tiket</span></h2>
+      <span style="font-size: 0.72rem; color: #64748b;">Tiket resmi aktif</span>
     </div>
 
-    <div class="card p-6 shadow-sm border" style="border-radius: var(--radius-lg);">
-      <span class="text-xs font-bold text-muted uppercase">Total Pengunjung Lapangan</span>
-      <h2 class="text-2xl font-black text-secondary mt-1"><?= number_format($totalPengunjungLapangan) ?> Orang</h2>
-      <span class="text-xs text-muted">Input loket & check-in</span>
+    <div class="kpi-card-luxury kpi-info">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.35rem;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Wisatawan Lapangan</span>
+        <span class="badge-luxury badge-luxury-info" style="font-size: 0.68rem;">Presensi</span>
+      </div>
+      <h2 style="font-size: 1.35rem; font-weight: 900; color: #0284c7; margin: 0.1rem 0; font-family: 'Outfit', sans-serif;"><?= number_format($totalPengunjungLapangan) ?> <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Orang</span></h2>
+      <span style="font-size: 0.72rem; color: #64748b;">Input loket & gate</span>
     </div>
   </div>
 
   <!-- Tabel 1: Pemesanan Tiket Online -->
   <?php if ($tipeLaporan === 'semua' || $tipeLaporan === 'pemesanan'): ?>
-    <div class="card p-6 shadow-sm bg-white mb-8" style="border-radius: var(--radius-xl);">
-      <h3 class="font-bold text-dark text-lg mb-4">1. Rincian Pemesanan Tiket Online</h3>
+    <div class="card-table-luxury mb-4">
+      <div class="card-table-header">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0;">
+          1. Rincian Pemesanan Tiket Online (<?= count($laporanPemesanan) ?> Transaksi)
+        </h3>
+      </div>
       <div class="overflow-x-auto">
-        <table class="table">
+        <table class="table-luxury">
           <thead>
             <tr>
               <th>Kode Booking</th>
@@ -155,21 +168,25 @@ if (!$isPrint) {
           </thead>
           <tbody>
             <?php if (empty($laporanPemesanan)): ?>
-              <tr><td colspan="8" class="text-center py-4 text-muted">Tidak ada transaksi pada periode ini.</td></tr>
+              <tr><td colspan="8" style="text-align: center; padding: 1.5rem; color: #94a3b8;">Tidak ada transaksi pada periode ini.</td></tr>
             <?php else: ?>
               <?php foreach ($laporanPemesanan as $p): ?>
                 <tr>
-                  <td class="font-mono font-bold text-xs"><?= htmlspecialchars($p['kode_booking']) ?></td>
-                  <td><?= htmlspecialchars($p['nama_pemesan'] ?? '-') ?></td>
+                  <td><span style="font-family: monospace; font-weight: 800; color: #0284c7;"><?= htmlspecialchars($p['kode_booking']) ?></span></td>
+                  <td><strong><?= htmlspecialchars($p['nama_pemesan'] ?? '-') ?></strong></td>
                   <td><?= htmlspecialchars($p['nama_destinasi']) ?></td>
                   <td><?= formatTanggalIndo($p['tanggal_kunjungan']) ?></td>
                   <td><?= $p['jumlah_tiket'] ?> (<?= ucfirst($p['tipe_rombongan']) ?>)</td>
-                  <td class="text-xs text-muted"><?= formatRupiah($p['diskon_didapat']) ?></td>
-                  <td class="font-bold"><?= formatRupiah($p['total_bayar']) ?></td>
+                  <td style="color: #64748b;"><?= formatRupiah($p['diskon_didapat']) ?></td>
+                  <td><strong style="color: #0d9488;"><?= formatRupiah($p['total_bayar']) ?></strong></td>
                   <td>
-                    <span class="badge badge-<?= $p['status_bayar'] === 'lunas' ? 'success' : 'warning' ?>">
-                      <?= ucfirst($p['status_bayar']) ?>
-                    </span>
+                    <?php if ($p['status_bayar'] === 'lunas'): ?>
+                      <span class="badge-luxury badge-luxury-success">Lunas</span>
+                    <?php elseif ($p['status_bayar'] === 'pending'): ?>
+                      <span class="badge-luxury badge-luxury-warning">Pending</span>
+                    <?php else: ?>
+                      <span class="badge-luxury badge-luxury-danger">Batal</span>
+                    <?php endif; ?>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -182,10 +199,14 @@ if (!$isPrint) {
 
   <!-- Tabel 2: Kunjungan Lapangan -->
   <?php if ($tipeLaporan === 'semua' || $tipeLaporan === 'kunjungan'): ?>
-    <div class="card p-6 shadow-sm bg-white mb-8" style="border-radius: var(--radius-xl);">
-      <h3 class="font-bold text-dark text-lg mb-4">2. Rekapitulasi Kunjungan Lapangan & Loket</h3>
+    <div class="card-table-luxury mb-4">
+      <div class="card-table-header">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0;">
+          2. Rekapitulasi Kunjungan Lapangan & Loket (<?= count($laporanKunjungan) ?> Entri)
+        </h3>
+      </div>
       <div class="overflow-x-auto">
-        <table class="table">
+        <table class="table-luxury">
           <thead>
             <tr>
               <th>Tanggal</th>
@@ -199,17 +220,17 @@ if (!$isPrint) {
           </thead>
           <tbody>
             <?php if (empty($laporanKunjungan)): ?>
-              <tr><td colspan="7" class="text-center py-4 text-muted">Tidak ada data kunjungan pada periode ini.</td></tr>
+              <tr><td colspan="7" style="text-align: center; padding: 1.5rem; color: #94a3b8;">Tidak ada data kunjungan pada periode ini.</td></tr>
             <?php else: ?>
               <?php foreach ($laporanKunjungan as $k): ?>
                 <tr>
                   <td><?= formatTanggalIndo($k['tanggal_kunjungan']) ?></td>
                   <td><?= htmlspecialchars($k['hari']) ?></td>
                   <td><strong><?= htmlspecialchars($k['nama_destinasi']) ?></strong></td>
-                  <td class="font-bold text-primary"><?= number_format($k['jumlah_pengunjung']) ?> Orang</td>
-                  <td><?= ucfirst($k['jenis_kunjungan']) ?></td>
+                  <td><strong style="color: #0d9488;"><?= number_format($k['jumlah_pengunjung']) ?> Orang</strong></td>
+                  <td><span class="badge badge-light"><?= ucfirst($k['jenis_kunjungan']) ?></span></td>
                   <td><?= htmlspecialchars($k['nama_petugas']) ?></td>
-                  <td class="text-xs text-muted"><?= htmlspecialchars($k['keterangan'] ?? '-') ?></td>
+                  <td style="font-size: 0.75rem; color: #64748b;"><?= htmlspecialchars($k['keterangan'] ?? '-') ?></td>
                 </tr>
               <?php endforeach; ?>
             <?php endif; ?>

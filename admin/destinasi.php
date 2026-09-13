@@ -187,11 +187,14 @@ require_once __DIR__ . '/includes/sidebar.php';
   <?php if ($action === 'list'): ?>
     <!-- LIST VIEW -->
     <div class="card-table-luxury">
-      <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
-        <h3 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 0;">
-          Daftar Objek Wisata Terdaftar (<?= count($destinasiList) ?>)
+      <div class="card-table-header">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+          Daftar Objek Wisata 
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">
+            <?= count($destinasiList) ?> Destinasi
+          </span>
         </h3>
-        <span class="badge-luxury badge-luxury-success" style="font-size: 0.75rem;">
+        <span class="badge-luxury badge-luxury-success" style="font-size: 0.68rem;">
           <i class="fa-solid fa-mountain-sun"></i> Data Aktif
         </span>
       </div>
@@ -199,8 +202,8 @@ require_once __DIR__ . '/includes/sidebar.php';
         <table class="table-luxury">
           <thead>
             <tr>
-              <th style="width: 10%;">Foto Wisata</th>
-              <th style="width: 30%;">Nama Destinasi & Lokasi</th>
+              <th style="width: 8%;">Foto</th>
+              <th style="width: 32%;">Nama Destinasi & Lokasi</th>
               <th style="width: 15%;">Kategori</th>
               <th style="width: 14%;">Harga Tiket</th>
               <th style="width: 13%;">Diskon Grup</th>
@@ -214,32 +217,32 @@ require_once __DIR__ . '/includes/sidebar.php';
             ?>
               <tr>
                 <td>
-                  <img src="<?= htmlspecialchars($foto) ?>" alt="<?= htmlspecialchars($d['nama_destinasi']) ?>" style="width: 68px; height: 50px; object-fit: cover; border-radius: 10px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.08);">
+                  <img src="<?= htmlspecialchars($foto) ?>" alt="<?= htmlspecialchars($d['nama_destinasi']) ?>" style="width: 48px; height: 36px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
                 </td>
                 <td>
-                  <strong class="text-dark text-sm block" style="font-weight: 800; font-size: 0.95rem;"><?= htmlspecialchars($d['nama_destinasi']) ?></strong>
-                  <span class="text-xs text-muted"><i class="fa-solid fa-location-dot text-primary"></i> <?= htmlspecialchars($d['lokasi']) ?></span>
+                  <strong style="font-weight: 800; font-size: 0.85rem; color: #0f172a; display: block;"><?= htmlspecialchars($d['nama_destinasi']) ?></strong>
+                  <span style="font-size: 0.72rem; color: #64748b;"><i class="fa-solid fa-location-dot text-primary"></i> <?= htmlspecialchars($d['lokasi']) ?></span>
                 </td>
-                <td><span class="badge badge-light" style="font-weight: 700;"><?= htmlspecialchars($d['nama_kategori']) ?></span></td>
-                <td><strong class="text-primary" style="font-family: 'Outfit', sans-serif; font-size: 1rem;"><?= formatRupiah($d['harga_tiket']) ?></strong></td>
+                <td><span class="badge badge-light" style="font-weight: 700; font-size: 0.72rem;"><?= htmlspecialchars($d['nama_kategori']) ?></span></td>
+                <td><strong style="color: #0d9488; font-family: 'Outfit', sans-serif; font-size: 0.92rem; font-weight: 800;"><?= formatRupiah($d['harga_tiket']) ?></strong></td>
                 <td>
                   <?php if ($d['diskon_rombongan'] > 0): ?>
-                    <span class="badge badge-accent" style="font-weight: 800;"><?= $d['diskon_rombongan'] ?>% (Min <?= $d['min_rombongan'] ?>)</span>
+                    <span class="badge badge-accent" style="font-weight: 800; font-size: 0.7rem;"><?= $d['diskon_rombongan'] ?>% (Min <?= $d['min_rombongan'] ?>)</span>
                   <?php else: ?>
-                    <span class="text-xs text-muted">Reguler</span>
+                    <span style="font-size: 0.72rem; color: #94a3b8;">Reguler</span>
                   <?php endif; ?>
                 </td>
                 <td>
-                  <div class="flex items-center gap-1 text-xs text-amber font-bold">
+                  <div style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.78rem; font-weight: 700; color: #f59e0b;">
                     <i class="fa-solid fa-star"></i> <?= number_format($d['rating'], 1) ?>
                   </div>
                 </td>
                 <td style="text-align: right;">
-                  <div class="flex gap-2 justify-end">
-                    <a href="<?= BASE_URL ?>admin/destinasi.php?action=edit&id=<?= $d['id'] ?>" class="btn btn-secondary btn-sm" title="Edit Data & Foto" style="border-radius: 0.5rem;">
+                  <div style="display: flex; gap: 0.25rem; justify-content: flex-end;">
+                    <a href="<?= BASE_URL ?>admin/destinasi.php?action=edit&id=<?= $d['id'] ?>" class="btn btn-secondary btn-sm" title="Edit Data & Foto">
                       <i class="fa-solid fa-pen-to-square"></i>
                     </a>
-                    <a href="<?= BASE_URL ?>admin/destinasi.php?action=delete&id=<?= $d['id'] ?>" class="btn btn-danger btn-sm" title="Hapus" style="border-radius: 0.5rem;" onclick="return confirm('Apakah Anda yakin ingin menghapus destinasi ini?')">
+                    <a href="<?= BASE_URL ?>admin/destinasi.php?action=delete&id=<?= $d['id'] ?>" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm('Apakah Anda yakin ingin menghapus destinasi ini?')">
                       <i class="fa-solid fa-trash"></i>
                     </a>
                   </div>

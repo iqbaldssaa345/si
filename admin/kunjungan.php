@@ -126,86 +126,85 @@ $flash = getFlash();
   <?php endif; ?>
 
   <!-- 4 KPI Stat Cards -->
-  <div class="grid grid-cols-4 gap-5 mb-6">
+  <div class="grid grid-cols-4 gap-4 mb-4">
     
     <!-- Total Wisatawan -->
-    <div class="kpi-card-luxury kpi-primary" style="padding: 1.25rem; border: 1px solid #e2e8f0;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-        <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #ccfbf1; color: #0d9488;">
+    <div class="kpi-card-luxury kpi-primary">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+        <div class="kpi-icon-wrap kpi-icon-primary">
           <i class="fa-solid fa-people-group"></i>
         </div>
-        <span class="badge-luxury badge-luxury-primary" style="font-size: 0.7rem;">Akumulasi</span>
+        <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">Akumulasi</span>
       </div>
-      <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+      <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
         Total Wisatawan
       </span>
-      <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-        <?= number_format($totalSemuaPengunjung) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Orang</span>
+      <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+        <?= number_format($totalSemuaPengunjung) ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Orang</span>
       </h3>
     </div>
 
     <!-- Individu -->
     <a href="<?= BASE_URL ?>admin/kunjungan.php?jenis=individu" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-info" style="cursor: pointer; padding: 1.25rem; border: <?= $jenisFilter === 'individu' ? '2px solid #0284c7' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #e0f2fe; color: #0284c7;">
+      <div class="kpi-card-luxury kpi-info" style="cursor: pointer; border: <?= $jenisFilter === 'individu' ? '2px solid #0284c7' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-info">
             <i class="fa-solid fa-user"></i>
           </div>
-          <span class="badge-luxury badge-luxury-info" style="font-size: 0.7rem;">Perorangan</span>
+          <span class="badge-luxury badge-luxury-info" style="font-size: 0.68rem;">Perorangan</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Kunjungan Individu
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= number_format($totalIndividu) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Orang</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= number_format($totalIndividu) ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Orang</span>
         </h3>
       </div>
     </a>
 
     <!-- Rombongan -->
     <a href="<?= BASE_URL ?>admin/kunjungan.php?jenis=rombongan" style="text-decoration: none; color: inherit;">
-      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; padding: 1.25rem; border: <?= $jenisFilter === 'rombongan' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-          <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #fef3c7; color: #d97706;">
+      <div class="kpi-card-luxury kpi-warning" style="cursor: pointer; border: <?= $jenisFilter === 'rombongan' ? '2px solid #d97706' : '1px solid #e2e8f0' ?>;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+          <div class="kpi-icon-wrap kpi-icon-warning">
             <i class="fa-solid fa-bus-simple"></i>
           </div>
-          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.7rem;">Grup / Tour</span>
+          <span class="badge-luxury badge-luxury-warning" style="font-size: 0.68rem;">Grup / Tour</span>
         </div>
-        <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
           Kunjungan Rombongan
         </span>
-        <h3 style="font-size: 1.5rem; font-weight: 900; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif;">
-          <?= number_format($totalRombongan) ?> <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">Orang</span>
+        <h3 style="font-size: 1.35rem; font-weight: 900; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif;">
+          <?= number_format($totalRombongan) ?> <span style="font-size: 0.78rem; font-weight: 600; color: #64748b;">Orang</span>
         </h3>
       </div>
     </a>
 
     <!-- Destinasi Terpadat -->
-    <div class="kpi-card-luxury kpi-success" style="padding: 1.25rem; border: 1px solid #e2e8f0;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-        <div class="kpi-icon-wrap" style="width: 44px; height: 44px; font-size: 1.15rem; background: #dcfce7; color: #059669;">
+    <div class="kpi-card-luxury kpi-success">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+        <div class="kpi-icon-wrap kpi-icon-success">
           <i class="fa-solid fa-trophy"></i>
         </div>
-        <span class="badge-luxury badge-luxury-success" style="font-size: 0.7rem;">Terfavorit</span>
+        <span class="badge-luxury badge-luxury-success" style="font-size: 0.68rem;">Terfavorit</span>
       </div>
-      <span style="font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
+      <span style="font-size: 0.68rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; display: block;">
         Destinasi Paling Ramai
       </span>
-      <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0.2rem 0 0 0; font-family: 'Outfit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($topDestRow['nama_destinasi'] ?? '-') ?>">
-        <?= htmlspecialchars($topDestRow['nama_destinasi'] ?? '-') ?> <span style="font-size: 0.8rem; font-weight: 600; color: #059669;">(<?= number_format($topDestRow['total'] ?? 0) ?>)</span>
+      <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0.15rem 0 0 0; font-family: 'Outfit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<?= htmlspecialchars($topDestRow['nama_destinasi'] ?? '-') ?>">
+        <?= htmlspecialchars($topDestRow['nama_destinasi'] ?? '-') ?> <span style="font-size: 0.78rem; font-weight: 600; color: #059669;">(<?= number_format($topDestRow['total'] ?? 0) ?>)</span>
       </h3>
     </div>
 
   </div>
 
   <!-- Filter Toolbar -->
-  <div class="card p-4 shadow-sm mb-6 bg-white" style="border-radius: 1rem; border: 1px solid #e2e8f0;">
-    <form action="<?= BASE_URL ?>admin/kunjungan.php" method="GET" class="flex items-center gap-3" style="flex-wrap: wrap;">
+  <div class="card p-3 shadow-sm mb-4 bg-white" style="border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+    <form action="<?= BASE_URL ?>admin/kunjungan.php" method="GET" class="flex items-center gap-2" style="flex-wrap: wrap;">
       
       <!-- Destinasi Dropdown -->
-      <div style="display: flex; align-items: center; gap: 0.4rem; min-width: 220px;">
-        <i class="fa-solid fa-mountain-sun text-muted text-xs"></i>
-        <select name="destinasi" class="form-control text-sm" style="border-radius: 0.65rem;">
+      <div style="display: flex; align-items: center; gap: 0.35rem; min-width: 190px;">
+        <select name="destinasi" class="form-control" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;">
           <option value="">Semua Destinasi</option>
           <?php foreach ($destList as $d): ?>
             <option value="<?= $d['id'] ?>" <?= $destFilter == $d['id'] ? 'selected' : '' ?>>
@@ -216,14 +215,13 @@ $flash = getFlash();
       </div>
 
       <!-- Tanggal Picker -->
-      <div style="display: flex; align-items: center; gap: 0.4rem;">
-        <i class="fa-regular fa-calendar text-muted text-xs"></i>
-        <input type="date" name="tgl" class="form-control text-sm" value="<?= htmlspecialchars($tglFilter) ?>" style="border-radius: 0.65rem;">
+      <div style="display: flex; align-items: center; gap: 0.35rem;">
+        <input type="date" name="tgl" class="form-control" value="<?= htmlspecialchars($tglFilter) ?>" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;">
       </div>
 
       <!-- Jenis Kunjungan Dropdown -->
-      <div style="display: flex; align-items: center; gap: 0.4rem;">
-        <select name="jenis" class="form-control text-sm" style="border-radius: 0.65rem;">
+      <div style="display: flex; align-items: center; gap: 0.35rem;">
+        <select name="jenis" class="form-control" style="font-size: 0.78rem; padding: 0.35rem 0.55rem;">
           <option value="">Semua Tipe</option>
           <option value="individu" <?= $jenisFilter === 'individu' ? 'selected' : '' ?>>Individu</option>
           <option value="rombongan" <?= $jenisFilter === 'rombongan' ? 'selected' : '' ?>>Rombongan</option>
@@ -231,47 +229,44 @@ $flash = getFlash();
       </div>
 
       <!-- Search Keyword -->
-      <div style="display: flex; align-items: center; gap: 0.4rem; flex: 1; min-width: 180px;">
-        <input type="text" name="q" id="searchKunjunganInput" class="form-control text-sm" value="<?= htmlspecialchars($search) ?>" placeholder="Cari destinasi / petugas..." style="border-radius: 0.65rem;" onkeyup="clientFilterKunjungan()">
+      <div style="display: flex; align-items: center; gap: 0.35rem; flex: 1; min-width: 160px;">
+        <input type="text" name="q" id="searchKunjunganInput" class="form-control" value="<?= htmlspecialchars($search) ?>" placeholder="Cari destinasi / petugas..." style="font-size: 0.78rem; padding: 0.35rem 0.55rem;" onkeyup="clientFilterKunjungan()">
       </div>
 
-      <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 0.65rem; font-weight: 700; padding: 0.55rem 1rem;">
-        <i class="fa-solid fa-filter"></i> Terapkan
+      <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 700;">
+        <i class="fa-solid fa-filter"></i> Filter
       </button>
 
       <?php if ($destFilter > 0 || !empty($tglFilter) || !empty($jenisFilter) || !empty($search)): ?>
-        <a href="<?= BASE_URL ?>admin/kunjungan.php" class="btn btn-secondary btn-sm" style="border-radius: 0.65rem;" title="Reset Filter">
-          <i class="fa-solid fa-rotate-left"></i> Reset
+        <a href="<?= BASE_URL ?>admin/kunjungan.php" class="btn btn-secondary btn-sm" title="Reset Filter">
+          <i class="fa-solid fa-rotate-left"></i>
         </a>
       <?php endif; ?>
 
-      <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem; background: #f8fafc; padding: 0.4rem 0.85rem; border-radius: 0.65rem; border: 1px solid #e2e8f0;">
-        <span class="text-xs text-muted uppercase font-bold">Hasil Filter:</span>
-        <strong style="font-size: 1.05rem; color: #0d9488; font-weight: 800;"><?= number_format($filterTotalPengunjung) ?></strong>
-        <span style="font-size: 0.8rem; color: #64748b;">Wisatawan</span>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 0.4rem; background: #f8fafc; padding: 0.25rem 0.65rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+        <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase;">Hasil:</span>
+        <strong style="font-size: 0.95rem; color: #0d9488; font-weight: 800;"><?= number_format($filterTotalPengunjung) ?></strong>
+        <span style="font-size: 0.75rem; color: #64748b;">Wisatawan</span>
       </div>
 
     </form>
   </div>
 
   <!-- Luxury Data Table -->
-  <div class="card-table-luxury" style="width: 100%;">
-    <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+  <div class="card-table-luxury">
+    <div class="card-table-header">
       <div>
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <h3 style="font-size: 0.95rem; font-weight: 800; color: #0f172a; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
           Log Catatan Presensi Lapangan
-          <span style="font-size: 0.8rem; font-weight: 700; color: #0d9488; background: #ccfbf1; padding: 0.15rem 0.6rem; border-radius: 9999px;">
+          <span class="badge-luxury badge-luxury-primary" style="font-size: 0.68rem;">
             <?= count($kunjunganList) ?> Entri
           </span>
         </h3>
-        <p style="font-size: 0.78rem; color: #64748b; margin: 0.15rem 0 0 0;">
-          Rekaman presensi masuk wisatawan langsung per destinasi yang dientrikan petugas.
-        </p>
       </div>
 
-      <div style="display: flex; gap: 0.4rem;">
-        <a href="<?= BASE_URL ?>petugas/input_kunjungan.php" target="_blank" class="btn btn-secondary btn-sm" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-size: 0.78rem;">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> Form Input Petugas
+      <div style="display: flex; gap: 0.35rem;">
+        <a href="<?= BASE_URL ?>petugas/input_kunjungan.php" target="_blank" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Input Petugas
         </a>
       </div>
     </div>

@@ -50,9 +50,14 @@ require_once __DIR__ . '/includes/header.php';
         <i class="fa-solid fa-calendar-days text-teal"></i>
         <span id="liveFullDate">Memuat kalender pariwisata...</span>
       </div>
+
+      <div class="live-clock-pill" title="Waktu Indonesia Barat (WIB)">
+        <i class="fa-solid fa-clock"></i>
+        <span id="liveDigitalClock">00:00:00 WIB</span>
+      </div>
     </div>
 
-    <!-- Right: Simulated Weather, Live Clock & Gate Operational Badge -->
+    <!-- Right: Simulated Weather, Gate Operational Badge & VIP Concierge Link -->
     <div class="live-status-group">
       
       <div class="live-weather-pill" title="Kondisi Cuaca Kawasan Wisata">
@@ -60,15 +65,14 @@ require_once __DIR__ . '/includes/header.php';
         <span id="liveWeatherText">28°C Cerah Berawan</span>
       </div>
 
-      <div class="live-clock-pill" title="Waktu Indonesia Barat (WIB)">
-        <i class="fa-solid fa-clock"></i>
-        <span id="liveDigitalClock">00:00:00 WIB</span>
-      </div>
-
       <div class="live-gate-badge" title="Status Pintu Masuk Loket Resmi">
         <span class="live-gate-pulse"></span>
         <span>Gerbang Wisata: BUKA</span>
       </div>
+
+      <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $settings['kontak_telp'] ?? '6282199887766') ?>?text=Halo%20VIP%20Concierge,%20saya%20butuh%20panduan%20reservasi%20tiket" target="_blank" class="live-vip-pill" title="Layanan Bantuan Khusus Pengunjung VIP">
+        <i class="fa-brands fa-whatsapp text-emerald"></i> <span>VIP Concierge</span>
+      </a>
 
     </div>
 
@@ -126,6 +130,16 @@ require_once __DIR__ . '/includes/header.php';
         <div>
           <div class="hero-clock-label">Sistem E-Ticketing</div>
           <div class="hero-clock-value text-emerald">QR Code Online</div>
+        </div>
+      </div>
+
+      <div class="hero-clock-divider"></div>
+
+      <div class="hero-clock-item">
+        <div class="hero-clock-icon" style="color: #38bdf8;"><i class="fa-solid fa-circle-check"></i></div>
+        <div>
+          <div class="hero-clock-label">Garansi Layanan</div>
+          <div class="hero-clock-value text-blue">100% Resmi & Sah</div>
         </div>
       </div>
     </div>
@@ -238,6 +252,10 @@ require_once __DIR__ . '/includes/header.php';
   <div class="grid grid-cols-4 gap-6">
     
     <div class="pillar-card">
+      <div class="flex justify-between items-center mb-3">
+        <span class="badge badge-primary text-xs"><i class="fa-solid fa-bolt text-amber"></i> Cepat</span>
+        <span class="text-xs font-bold text-muted">FITUR 01</span>
+      </div>
       <div class="pillar-icon-box pillar-icon-teal">
         <i class="fa-solid fa-qrcode"></i>
       </div>
@@ -246,26 +264,38 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 
     <div class="pillar-card">
+      <div class="flex justify-between items-center mb-3">
+        <span class="badge badge-accent text-xs"><i class="fa-solid fa-tags text-amber"></i> Hemat s/d 20%</span>
+        <span class="text-xs font-bold text-muted">FITUR 02</span>
+      </div>
       <div class="pillar-icon-box pillar-icon-amber">
-        <i class="fa-solid fa-tags"></i>
+        <i class="fa-solid fa-users-line"></i>
       </div>
       <h3 class="pillar-title">Diskon Rombongan Otomatis</h3>
-      <p class="pillar-desc">Dapatkan potongan harga spesial hingga 20% langsung dihitung sistem untuk rombongan sekolah & komunitas.</p>
+      <p class="pillar-desc">Dapatkan potongan harga spesial langsung dihitung otomatis untuk rombongan sekolah, instansi & keluarga.</p>
     </div>
 
     <div class="pillar-card">
+      <div class="flex justify-between items-center mb-3">
+        <span class="badge badge-primary text-xs"><i class="fa-solid fa-shield-check text-blue"></i> Terverifikasi</span>
+        <span class="text-xs font-bold text-muted">FITUR 03</span>
+      </div>
       <div class="pillar-icon-box pillar-icon-blue">
         <i class="fa-solid fa-credit-card"></i>
       </div>
       <h3 class="pillar-title">Multi Pembayaran Resmi</h3>
-      <p class="pillar-desc">Didukung QRIS instan, Transfer Bank BCA/Mandiri/BRI terverifikasi otomatis, dan opsi loket terpadu.</p>
+      <p class="pillar-desc">Didukung QRIS instan, Transfer Bank BCA/Mandiri/BRI terverifikasi otomatis, dan loket tunai terpadu.</p>
     </div>
 
     <div class="pillar-card">
+      <div class="flex justify-between items-center mb-3">
+        <span class="badge badge-success text-xs"><i class="fa-solid fa-circle-check text-emerald"></i> < 3 Detik</span>
+        <span class="text-xs font-bold text-muted">FITUR 04</span>
+      </div>
       <div class="pillar-icon-box pillar-icon-emerald">
         <i class="fa-solid fa-shield-halved"></i>
       </div>
-      <h3 class="pillar-title">Validasi Cepat di Gerbang</h3>
+      <h3 class="pillar-title">Validasi Gerbang Kilat</h3>
       <p class="pillar-desc">Scan barcode real-time oleh petugas di pintu masuk untuk proses check-in cepat kurang dari 3 detik.</p>
     </div>
 
@@ -287,7 +317,7 @@ require_once __DIR__ . '/includes/header.php';
       <?php foreach ($kategoriList as $kat): ?>
         <a href="<?= BASE_URL ?>destinasi.php?kategori=<?= $kat['id'] ?>" class="category-card-luxury">
           <div class="category-icon-luxury">
-            <i class="fa-solid <?= !empty($kat['icon']) ? htmlspecialchars(str_replace('fa-solid ', '', $kat['icon'])) : 'fa-map-pin' ?>"></i>
+            <?= renderKategoriIcon($kat['icon'], 'fa-shapes') ?>
           </div>
           <h3 class="category-title-luxury"><?= htmlspecialchars($kat['nama_kategori']) ?></h3>
           <span class="category-pill-count"><?= $kat['total_destinasi'] ?> Destinasi Pilihan</span>
@@ -321,7 +351,7 @@ require_once __DIR__ . '/includes/header.php';
       </button>
       <?php foreach ($kategoriList as $kat): ?>
         <button type="button" class="filter-pill-btn" onclick="filterDestinasiCards('<?= $kat['id'] ?>', this)">
-          <i class="fa-solid <?= !empty($kat['icon']) ? htmlspecialchars(str_replace('fa-solid ', '', $kat['icon'])) : 'fa-tag' ?>"></i>
+          <?= renderKategoriIcon($kat['icon'], 'fa-tag') ?>
           <?= htmlspecialchars($kat['nama_kategori']) ?>
         </button>
       <?php endforeach; ?>
@@ -451,6 +481,7 @@ require_once __DIR__ . '/includes/header.php';
             <button type="button" class="quick-qty-chip active" onclick="setSimQty(10)">10 Orang (Grup)</button>
             <button type="button" class="quick-qty-chip" onclick="setSimQty(20)">20 Orang</button>
             <button type="button" class="quick-qty-chip" onclick="setSimQty(50)">50 Orang</button>
+            <button type="button" class="quick-qty-chip" onclick="setSimQty(100)">100 Orang</button>
           </div>
 
           <!-- Feature checklist -->
@@ -645,9 +676,27 @@ require_once __DIR__ . '/includes/header.php';
           <div>
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
-                <div class="avatar" style="width: 46px; height: 46px; font-size: 1.1rem; background: linear-gradient(135deg, var(--primary), var(--secondary));">
-                  <?= strtoupper(substr($ul['nama_user'], 0, 1)) ?>
-                </div>
+                <?php 
+                  $uFoto = trim($ul['user_foto'] ?? '');
+                  $userAvatarUrl = '';
+                  if (!empty($uFoto) && $uFoto !== 'default_avatar.png') {
+                      if (strpos($uFoto, 'http://') === 0 || strpos($uFoto, 'https://') === 0) {
+                          $userAvatarUrl = $uFoto;
+                      } elseif (file_exists(__DIR__ . '/assets/uploads/users/' . $uFoto)) {
+                          $userAvatarUrl = BASE_URL . 'assets/uploads/users/' . $uFoto;
+                      }
+                  }
+                ?>
+                <?php if (!empty($userAvatarUrl)): ?>
+                  <img src="<?= htmlspecialchars($userAvatarUrl) ?>" alt="<?= htmlspecialchars($ul['nama_user']) ?>" style="width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                  <div class="avatar" style="display: none; width: 46px; height: 46px; font-size: 1.1rem; background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                    <?= strtoupper(substr($ul['nama_user'], 0, 1)) ?>
+                  </div>
+                <?php else: ?>
+                  <div class="avatar" style="width: 46px; height: 46px; font-size: 1.1rem; background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                    <?= strtoupper(substr($ul['nama_user'], 0, 1)) ?>
+                  </div>
+                <?php endif; ?>
                 <div>
                   <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: var(--dark-900);"><?= htmlspecialchars($ul['nama_user']) ?></h4>
                   <span class="text-xs text-muted">Berkunjung ke: <strong class="text-primary"><?= htmlspecialchars($ul['nama_destinasi']) ?></strong></span>
@@ -918,8 +967,8 @@ require_once __DIR__ . '/includes/header.php';
   function setSearchFilter(katId, promoType) {
     const tabs = document.querySelectorAll('.search-tab-btn');
     tabs.forEach(t => t.classList.remove('active'));
-    if (event && event.currentTarget) {
-      event.currentTarget.classList.add('active');
+    if (window.event && window.event.currentTarget) {
+      window.event.currentTarget.classList.add('active');
     }
 
     const select = document.getElementById('searchKategori');

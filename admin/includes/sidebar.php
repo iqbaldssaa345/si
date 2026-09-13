@@ -20,15 +20,15 @@ if (isset($pdo) && $pdo) {
   
   <!-- Brand Header -->
   <div class="admin-sidebar-brand">
-    <div class="admin-brand-icon">
-      <i class="fa-solid fa-crown text-amber"></i>
+    <div class="admin-brand-icon-luxury admin-icon-admin">
+      <span class="luxury-emote-brand">👑</span>
     </div>
-    <div style="overflow: hidden; flex: 1;">
-      <span style="display: block; font-weight: 800; font-size: 0.95rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <span style="display: block; font-weight: 800; font-size: 0.88rem; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($settings['nama_sistem'] ?? 'Pesona Nusantara') ?>
       </span>
-      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #38bdf8; font-weight: 600;">
-        <span style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 8px #22c55e;"></span>
+      <span style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; color: #38bdf8; font-weight: 600; line-height: 1.2;">
+        <span style="width: 5px; height: 5px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 6px #22c55e;"></span>
         Super Admin Control
       </span>
     </div>
@@ -41,17 +41,17 @@ if (isset($pdo) && $pdo) {
   ?>
   <div class="admin-profile-pill">
     <?php if ($hasSessFoto): ?>
-      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($sessFoto) ?>" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #2dd4bf; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+      <img src="<?= BASE_URL ?>assets/uploads/users/<?= htmlspecialchars($sessFoto) ?>" alt="Avatar" style="width: 28px; height: 28px; min-width: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #2dd4bf;">
     <?php else: ?>
       <div class="admin-avatar">
         <?= $initial ?>
       </div>
     <?php endif; ?>
-    <div style="overflow: hidden; flex: 1;">
-      <strong style="display: block; font-size: 0.875rem; color: #f8fafc; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+    <div style="overflow: hidden; flex: 1; min-width: 0;">
+      <strong style="display: block; font-size: 0.8rem; color: #f8fafc; font-weight: 700; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userName) ?>
       </strong>
-      <span style="font-size: 0.72rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+      <span style="font-size: 0.68rem; color: #94a3b8; display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; line-height: 1.2;">
         <?= htmlspecialchars($userEmail) ?>
       </span>
     </div>
@@ -60,7 +60,7 @@ if (isset($pdo) && $pdo) {
   <!-- Navigation Menu -->
   <ul class="admin-nav-list">
     
-    <li style="padding: 0.6rem 0.5rem 0.25rem 0.5rem; font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">
+    <li class="admin-nav-section-title">
       Menu Utama
     </li>
 
@@ -76,7 +76,7 @@ if (isset($pdo) && $pdo) {
         <i class="fa-solid fa-mountain-sun"></i>
         <span style="flex: 1;">Destinasi Wisata</span>
         <?php if ($cntDestinasi > 0): ?>
-          <span style="font-size: 0.7rem; font-weight: 700; background: rgba(255,255,255,0.1); color: #94a3b8; padding: 0.15rem 0.5rem; border-radius: 9999px;">
+          <span class="admin-nav-badge">
             <?= $cntDestinasi ?>
           </span>
         <?php endif; ?>
@@ -90,7 +90,7 @@ if (isset($pdo) && $pdo) {
       </a>
     </li>
 
-    <li style="padding: 0.85rem 0.5rem 0.25rem 0.5rem; font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">
+    <li class="admin-nav-section-title">
       Transaksi & Layanan
     </li>
 
@@ -99,7 +99,7 @@ if (isset($pdo) && $pdo) {
         <i class="fa-solid fa-ticket"></i>
         <span style="flex: 1;">Pemesanan & Tiket</span>
         <?php if ($cntPendingPesanan > 0): ?>
-          <span style="font-size: 0.68rem; font-weight: 800; background: #ef4444; color: #ffffff; padding: 0.15rem 0.45rem; border-radius: 9999px; animation: pulse 2s infinite;">
+          <span class="admin-nav-badge admin-nav-badge-danger">
             <?= $cntPendingPesanan ?> Baru
           </span>
         <?php endif; ?>
@@ -120,7 +120,7 @@ if (isset($pdo) && $pdo) {
       </a>
     </li>
 
-    <li style="padding: 0.85rem 0.5rem 0.25rem 0.5rem; font-size: 0.68rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em;">
+    <li class="admin-nav-section-title">
       Konfigurasi Sistem
     </li>
 
@@ -129,7 +129,7 @@ if (isset($pdo) && $pdo) {
         <i class="fa-solid fa-user-gear"></i>
         <span style="flex: 1;">Manajemen User</span>
         <?php if ($cntUsers > 0): ?>
-          <span style="font-size: 0.7rem; font-weight: 700; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.15rem 0.5rem; border-radius: 9999px;">
+          <span class="admin-nav-badge admin-nav-badge-info">
             <?= $cntUsers ?>
           </span>
         <?php endif; ?>
@@ -145,13 +145,11 @@ if (isset($pdo) && $pdo) {
 
   </ul>
 
-  <!-- Sidebar Footer -->
+  <!-- Sidebar Footer - Single Logout Docked to Bottom -->
   <div class="admin-sidebar-footer">
-    <a href="<?= BASE_URL ?>index.php" target="_blank" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); justify-content: center; width: 100%; border-radius: 0.65rem;">
-      <i class="fa-solid fa-arrow-up-right-from-square"></i> Lihat Portal Wisata
-    </a>
-    <a href="<?= BASE_URL ?>logout.php" class="btn btn-danger btn-sm" style="justify-content: center; width: 100%; border-radius: 0.65rem;" onclick="return confirm('Apakah Anda yakin ingin keluar dari panel admin?')">
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
+    <a href="<?= BASE_URL ?>logout.php" class="admin-footer-logout-single" onclick="return confirm('Apakah Anda yakin ingin keluar dari panel admin?')" title="Keluar dari Panel Admin">
+      <span class="admin-footer-logout-icon">🚪</span>
+      <span>Keluar Panel Admin</span>
     </a>
   </div>
 

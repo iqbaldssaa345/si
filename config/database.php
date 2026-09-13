@@ -129,16 +129,16 @@ function checkAuth($roleRequired = null) {
         if ($userRole === 'admin') {
             return;
         }
-        if (is_array($roleRequired)) {
-            if (!in_array($userRole, $roleRequired)) {
+        $allowed = is_array($roleRequired) ? in_array($userRole, $roleRequired) : ($userRole === $roleRequired);
+        if (!$allowed) {
+            if ($userRole === 'petugas') {
+                header("Location: " . BASE_URL . "petugas/index.php");
+            } elseif ($userRole === 'pengunjung') {
+                header("Location: " . BASE_URL . "pengunjung/index.php");
+            } else {
                 header("Location: " . BASE_URL . "index.php?msg=unauthorized");
-                exit;
             }
-        } else {
-            if ($userRole !== $roleRequired) {
-                header("Location: " . BASE_URL . "index.php?msg=unauthorized");
-                exit;
-            }
+            exit;
         }
     }
 }
@@ -190,3 +190,39 @@ function getFlash() {
     }
     return null;
 }
+
+/**
+ * Helper: Render Ikon Kategori (Mendukung Emote / Emoji & Font Awesome)
+ * Kompatibel dengan PHP 7.x & 8.x
+ */
+function renderKategoriIcon($icon, $default = 'fa-map-pin', $extraClass = '') {
+    $icon = trim($icon ?? '');
+    if (empty($icon)) {
+        return '<i class="fa-solid ' . htmlspecialchars($default) . (!empty($extraClass) ? ' ' . htmlspecialchars($extraClass) : '') . '"></i>';
+    }
+
+    // Mapping ikon Font Awesome Pro ke emoji / icon free jika ada
+    $proMap = [
+        'fa-ferris-wheel' => '🎡',
+        'fa-roller-coaster' => '🎢',
+        'fa-water-slide' => 'fa-water',
+    ];
+    if (isset($proMap[$icon])) {
+        $icon = $proMap[$icon];
+    }
+
+    // Cek apakah berupa Emote / Emoji (tidak diawali fa- atau mengandung karakter emoji)
+    $hasFa = (strpos($icon, 'fa-') === 0 || strpos($icon, 'fa ') === 0 || strpos($icon, 'fa-solid ') === 0 || strpos($icon, 'fas ') === 0);
+
+    if (!$hasFa || preg_match('/[\x{1F300}-\x{1F9FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}]/u', $icon)) {
+        return '<span class="kategori-emote-icon' . (!empty($extraClass) ? ' ' . htmlspecialchars($extraClass) : '') . '" style="font-style: normal; line-height: 1; display: inline-flex; align-items: center; justify-content: center;">' . $icon . '</span>';
+    }
+
+    $cleanFa = str_replace(['fa-solid ', 'fa '], '', $icon);
+    if (strpos($cleanFa, 'fa-') !== 0) {
+        $cleanFa = 'fa-' . $cleanFa;
+    }
+
+    return '<i class="fa-solid ' . htmlspecialchars($cleanFa) . (!empty($extraClass) ? ' ' . htmlspecialchars($extraClass) : '') . '"></i>';
+}
+
